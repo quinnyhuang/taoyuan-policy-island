@@ -54,12 +54,13 @@ button:focus-visible,a:focus-visible{outline:3px solid var(--peach);outline-offs
 .brand h1{font-family:var(--f-display);font-size:clamp(28px,4.4vw,40px);margin:0;line-height:1.05;color:var(--teal);font-weight:400;letter-spacing:.04em}
 .brand p{margin:6px 0 0;font-size:clamp(13px,1.6vw,16px);color:var(--ink);font-weight:700;letter-spacing:.06em}
 .brand .by{display:inline-block;margin:6px 0 0 6px;font-size:11.5px;color:var(--muted)}
+.brand .thr{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-top:8px}.brand .thr a{display:inline-flex;align-items:center;gap:6px;background:var(--ink);color:var(--paper);text-decoration:none;font-weight:700;font-size:13px;border-radius:999px;padding:5px 12px}.brand .thr a:hover{opacity:.88}.brand .thr span{font-size:12.5px;font-weight:700;color:var(--peach)}
 .brand .unoff{display:inline-block;margin-top:6px;font-size:11.5px;font-weight:700;color:var(--ink);background:var(--teal-soft);border-radius:6px;padding:1px 8px}
 .tools{top:calc(12px + env(safe-area-inset-top,0px));right:max(12px,env(safe-area-inset-right,0px));display:flex;flex-direction:column;gap:8px}
 .tools button{background:var(--card);border:0;border-radius:12px;padding:8px 12px;box-shadow:var(--shadow);font-size:13.5px;font-weight:700;display:flex;align-items:center;gap:6px;justify-content:flex-start}
 .tools button.on{background:var(--peach);color:#fff}
 .tools svg{width:16px;height:16px;flex:0 0 auto}
-.progress{left:50%;transform:translateX(-50%);bottom:calc(14px + env(safe-area-inset-bottom,0px));background:var(--card);border-radius:999px;padding:6px 14px;box-shadow:var(--shadow);font-size:13px;display:flex;gap:10px;align-items:center;white-space:nowrap}
+.progress{border:0;font:inherit;color:inherit;cursor:pointer;left:50%;transform:translateX(-50%);bottom:calc(14px + env(safe-area-inset-bottom,0px));background:var(--card);border-radius:999px;padding:6px 14px;box-shadow:var(--shadow);font-size:13px;display:flex;gap:10px;align-items:center;white-space:nowrap}
 .progress .dots{display:flex;gap:3px}
 .progress .dots i{width:8px;height:8px;border-radius:50%;background:var(--line)}
 .progress .dots i.on{background:var(--peach)}
@@ -98,6 +99,7 @@ button:focus-visible,a:focus-visible{outline:3px solid var(--peach);outline-offs
 .tod button{border:0;background:none;width:38px;height:34px;border-radius:999px;display:grid;place-items:center;color:var(--muted)}
 .tod button svg{width:20px;height:20px}.tod button.on{background:var(--ink);color:var(--paper)}
 @media (max-width:999px){.tod{top:auto;left:auto;right:max(12px,env(safe-area-inset-right,0px));bottom:calc(58px + env(safe-area-inset-bottom,0px));transform:none}}
+.ph3{font-size:13px;color:var(--muted);margin:14px 0 6px}.stps{display:grid;grid-template-columns:repeat(auto-fill,minmax(96px,1fr));gap:6px}.stp{background:var(--paper);border-radius:12px;padding:8px 8px 8px 30px;position:relative;font-size:13.5px;line-height:1.3}.stp i{position:absolute;left:8px;top:9px;width:16px;height:16px;border-radius:50%;border:2px dashed var(--line);font-style:normal;font-size:10px;display:grid;place-items:center}.stp.on i{border:0;background:var(--peach);color:#fff}.stp b{display:block}.stp small{color:var(--muted);font-size:11.5px}
 .pidx{display:none;top:0;right:0;bottom:0;width:330px;background:var(--card);box-shadow:-6px 0 24px rgba(20,40,40,.1);overflow:auto;padding:calc(22px + env(safe-area-inset-top,0px)) max(20px,env(safe-area-inset-right,0px)) 24px 22px;pointer-events:auto;z-index:6}
 .pidx h2{font-family:var(--f-display);font-weight:400;font-size:30px;margin:6px 0 4px;line-height:1.15}
 .pidx .pmeta{margin:0 0 12px;font-size:12.5px;color:var(--muted)}
@@ -211,6 +213,7 @@ button:focus-visible,a:focus-visible{outline:3px solid var(--peach);outline-offs
   <h1>桃園政策島</h1>
   <p>黃世杰．心桃園動起來</p>
   <span class="unoff">非官方 · 依公開報導整理</span>
+  <div class="thr"><a href="https://www.threads.com/@schuanglawyer?hl=zh-tw" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" width="15" height="15" fill="currentColor" aria-hidden="true"><path d="M12.2 22c-3.1 0-5.4-1-6.9-3C3.9 17.3 3.2 15 3.2 12s.7-5.3 2.1-7C6.8 3 9.1 2 12.2 2c2.5 0 4.5.6 6 1.9 1.4 1.2 2.3 2.8 2.7 4.8l-2.3.5c-.6-3-2.8-4.9-6.4-4.9-2.4 0-4.2.7-5.3 2.2C5.9 7.9 5.4 9.8 5.4 12s.5 4.1 1.5 5.5c1.1 1.5 2.9 2.2 5.3 2.2 2 0 3.4-.5 4.5-1.4 1.2-1 1.6-2.3 1.6-3.4 0-1-.4-1.8-1.1-2.4-.1 1.2-.5 2.3-1.2 3.1-.9 1-2.2 1.6-3.8 1.6-1.3 0-2.4-.4-3.2-1.1-.8-.7-1.2-1.6-1.2-2.7 0-2.4 1.9-3.9 5.1-3.9.7 0 1.4.1 2 .2-.2-1.4-1-2.1-2.5-2.1-1.1 0-1.9.4-2.4 1.1l-1.8-1.3C9.1 6.2 10.5 5.6 12.3 5.6c2.6 0 4.2 1.5 4.6 4.1.8.3 1.5.8 2.1 1.4 1 1 1.5 2.3 1.5 3.7 0 1.7-.7 3.4-2.2 4.8C16.8 21.2 14.8 22 12.2 22zm.7-9.3c-2.1 0-2.9.7-2.9 1.6 0 .9.8 1.6 2.1 1.6 1.7 0 2.7-1 2.9-3-.6-.1-1.3-.2-2.1-.2z"/></svg>追蹤四姐的 Threads</a><span>一起衝 10 萬追蹤</span></div>
 </div>
 <div class="hud tod" id="tod" role="group" aria-label="時段">
   <button data-t="dawn" aria-label="清晨" title="清晨"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M3 14h14M6 14a4 4 0 0 1 8 0M10 4v3M4.5 8l1.6 1.4M15.5 8l-1.6 1.4"/></svg></button>
@@ -230,7 +233,7 @@ button:focus-visible,a:focus-visible{outline:3px solid var(--peach);outline-offs
   <button id="bIndex"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M3 4h10M3 8h10M3 12h7"/></svg>政見索引</button>
   <button id="bChar"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="8" cy="6" r="3"/><path d="M3 14c1-3 3-4 5-4s4 1 5 4"/></svg>角色</button>
 </div>
-<div class="hud progress"><span class="lbl">已聽完</span><span id="pTxt">0 / 12</span><span class="dots" id="pDots"></span><span class="badge" id="pBadge" hidden>行動小六法</span></div>
+<button class="hud progress" id="pPass" aria-label="打開集章護照"><span class="lbl">集章護照</span><span id="pTxt">0 / 22</span><span class="dots" id="pDots"></span><span class="badge" id="pBadge" hidden></span></button>
 <button class="hud talk" id="talk" hidden></button>
 <div class="hud toast" id="toast" hidden role="status"></div>
 <div class="hud" id="joy" aria-hidden="true"><i></i></div>
@@ -354,19 +357,32 @@ const CV=[
 ];
 
 /* ---------- state ---------- */
-const st={done:{},overview:false,near:null,auto:null,book:false,look:{shirt:0xe9715d,hat:"none"}};
+const st={done:{},isl:{},items:{},nick:"",overview:false,near:null,auto:null,look:{shirt:0xe9715d,hat:"none",scarf:"solid",glasses:false}};
 try{const s=JSON.parse(localStorage.getItem("tyLook2")||"null");if(s)st.look=s}catch(e){}
-try{const s=JSON.parse(localStorage.getItem("tyDone2")||"null");if(s){st.done=s.done||{};st.book=!!s.book}}catch(e){}
+try{const s=JSON.parse(localStorage.getItem("tyDone2")||"null");if(s){st.done=s.done||{};st.isl=s.isl||{};st.items=s.items||{};if(s.book)st.items.book=1;st.nick=s.nick||"";st.certShown=!!s.cert}}catch(e){}
+st.look=Object.assign({shirt:0xe9715d,hat:"none",scarf:"solid",glasses:false},st.look);
 const $=id=>document.getElementById(id);
 const islOf=id=>ISL.find(i=>i.id===id);
 
 /* ---------- UI ---------- */
-function save(){try{localStorage.setItem("tyDone2",JSON.stringify({done:st.done,book:st.book}))}catch(e){}}
-function progress(){window.renderIdx&&$("plist")&&renderIdx($("pq")?$("pq").value:"");
+function save(){try{localStorage.setItem("tyDone2",JSON.stringify({done:st.done,isl:st.isl,items:st.items,nick:st.nick,cert:st.certShown}))}catch(e){}}
+const TRS=[
+ {id:"book",name:"行動小六法",isl:"youth",msg:"撿到一本「行動小六法」！這是學弟沈伯洋給四姐取的綽號。",unlock:"四姐同款圓框眼鏡",hint:"青年島的社會新鮮人好像掉了一本很厚的法典。"},
+ {id:"pass",name:"登機證",isl:"industry",msg:"撿到一張登機證！目的地：世界桃園。",unlock:"機長帽",hint:"產業島離機場最近，聽說有旅客把登機證掉在那裡。"},
+ {id:"umbrella",name:"油紙傘",isl:"hakka",msg:"撿到一把客家油紙傘！",unlock:"油紙傘",hint:"客語島的阿妹婆說，她的油紙傘不知道放到哪裡了。"},
+ {id:"buspass",name:"公車月票",isl:"traffic",msg:"撿到一張公車月票！公車準點，大家才敢搭。",unlock:"司機帽",hint:"交通島上有人在等公車時，把月票弄丟了。"},
+ {id:"drop",name:"小水滴",isl:"mrt",msg:"撿到一顆小水滴！聽說是順著台北洋流漂過來的。",unlock:"水滴藍圍巾",hint:"有一顆從台北洋流漂來的小水滴，停在桃園最東邊的捷運島。"},
+ {id:"ribbon",name:"世杰飄帶",isl:"child",msg:"撿到一條世杰飄帶！可以拿來當圍巾喔。",unlock:"世杰飄帶圍巾",hint:"育兒島的媽媽說，她包包上的世杰飄帶被風吹走了。"}];
+const nItems=()=>TRS.filter(t=>st.items[t.id]).length;
+const nStamps=()=>ISL.filter(i=>st.isl[i.id]).length+NPCS.filter(p=>st.done[p.id]).length;
+const STAMP_TOTAL=()=>ISL.length+NPCS.length;
+function nextHint(){const t=TRS.find(t=>!st.items[t.id]);return t?t.hint:null}
+function stampCheck(){progress();if(nStamps()===STAMP_TOTAL()&&!st.certShown){st.certShown=true;save();setTimeout(()=>{toast("集章完成！你可以領取「桃園政策島完走證」了。",4200);openCert()},900)}}
+function progress(){if($("pTxt")){$("pTxt").textContent=`${nStamps()} / ${STAMP_TOTAL()}`;const ni=nItems();$("pBadge").hidden=!ni;$("pBadge").textContent=`寶物 ${ni}/6`}window.renderIdx&&$("plist")&&renderIdx($("pq")?$("pq").value:"");
   const n=NPCS.filter(p=>st.done[p.id]).length;
-  $("pTxt").textContent=`${n} / ${NPCS.length}`;
-  $("pDots").innerHTML=NPCS.map(p=>`<i class="${st.done[p.id]?'on':''}"></i>`).join("");
-  $("pBadge").hidden=!st.book;save();
+  
+  $("pDots").innerHTML="";
+  save();
 }
 let toastT;function toast(t,ms=3200){const el=$("toast");el.textContent=t;el.hidden=false;clearTimeout(toastT);toastT=setTimeout(()=>el.hidden=true,ms)}
 const sheet=$("sheet");
@@ -384,8 +400,8 @@ function openTalk(p,i=0){
   $("sk").onclick=()=>{markNpc(p);openCard(isl)};
   if(i===p.lines.length-1)markNpc(p);
 }
-function markNpc(p){if(!st.done[p.id]){st.done[p.id]=1;progress();window.markDone&&markDone(p);if(NPCS.every(q=>st.done[q.id]))toast("12 位市民都聽完了！去找四姐聊聊吧。",4200)}}
-function openCard(isl,hl=-1){
+function markNpc(p){if(!st.done[p.id]){st.done[p.id]=1;stampCheck();window.markDone&&markDone(p);if(NPCS.every(q=>st.done[q.id]))toast("12 位市民都聽完了！去找四姐聊聊吧。",4200)}}
+function openCard(isl,hl=-1){if(!st.isl[isl.id]){st.isl[isl.id]=1;setTimeout(stampCheck,50)}
   const c=isl.card,ext=isl.kind==="ext";
   const npcs=NPCS.filter(p=>p.isl===isl.id);
   open(`<article class="pc"><div class="eyebrow ${ext?'ext':''}">${tagOf(isl)} · ${isl.name}</div><h2>${c.t}</h2><p class="sum">${c.sum}</p>
@@ -416,7 +432,7 @@ function openBoss(step=0){
   const L=["嗨！我是四姐，依桃園市長參選人黃世杰的形象設計的角色。我會在各島的肥皂箱之間跑來跑去，跟大家聊政見。","這裡有六大政見和四項延伸政見，島上的編號物件是具體目標，12 位市民會告訴你每項政見在說什麼。","想先認識我，還是直接看政見總覽？"];
   const all=NPCS.every(p=>st.done[p.id]);
   open(`<div class="npc-head"><div><div class="eyebrow" style="color:var(--gold)">巡迴中</div><h2>四姐</h2><small>依黃世杰形象設計的角色；台詞由本頁撰寫，不是本人發言</small></div></div>
-   <div class="bubble">${step<L.length?L[step]:(all?"12 位市民都聽完了，謝謝你逛完整座島！":L[2])}${st.book&&step>=L.length-1?"<br><br>咦，你撿到「行動小六法」了？那是學弟沈伯洋在文宣上給我取的綽號。":""}</div>
+   <div class="bubble">${step<L.length?L[step]:(all?"12 位市民都聽完了，謝謝你逛完整座島！":L[2])}${step>=L.length-1?(st.items.book?"<br><br>咦，你撿到「行動小六法」了？那是學弟沈伯洋在文宣上給我取的綽號。":"")+(nItems()<6?`<br><br>🔎 尋寶 ${nItems()}/6：${nextHint()}`:"<br><br>🎉 6 件寶物都找到了，你是尋寶達人！"):""}</div>
    <div class="row">${step<L.length-1?`<button class="btn pri" id="bn">繼續（${step+1}/${L.length}）</button>`:`
      <button class="btn pri" id="b1">學經歷</button><button class="btn sec" id="b2">政見總覽</button><button class="btn gold" id="b3">叫公車</button><button class="btn gold" id="b4">建中同學是誰？</button>`}</div>`);
   const bn=$("bn");if(bn)bn.onclick=()=>openBoss(step+1);
@@ -440,6 +456,51 @@ const FRIENDS={penguin:{t:"桃園政策島（桃園小企鵝）",d:"另一位支
 function openFriend(k){const f=FRIENDS[k];open(`<div class="eyebrow" style="color:#d9645b">友站</div><h2 style="font-family:var(--f-display);font-weight:400;margin:4px 0 8px;font-size:26px;line-height:1.25">${f.t}</h2><p style="margin:0 0 14px">${f.d}</p>
   <a class="btn pri" style="display:block;text-align:center;text-decoration:none;background:#d9645b;border-color:#d9645b" href="${f.u}" target="_blank" rel="noopener">前往 ${f.u.replace(/^https:\/\//,"").replace(/\/$/,"")} ↗</a>
   <p class="fine">這是另一位支持者自製的網站，內容由該站作者整理。我們一起組成「<a href="https://taoyuan-penguin.twcrowsnest.com/ring/" target="_blank" rel="noopener">桃園政策島聯盟</a>」，可以互相串門子。</p>`)}
+
+function openPassport(){const ok=nStamps()===STAMP_TOTAL();
+  const stp=(on,txt,sub)=>`<div class="stp ${on?'on':''}"><i>${on?'✓':''}</i><b>${txt}</b>${sub?`<small>${sub}</small>`:""}</div>`;
+  open(`<div class="eyebrow">集章護照</div><h2 style="font-family:var(--f-display);font-weight:400;margin:4px 0 4px;font-size:26px">已蓋 ${nStamps()} / ${STAMP_TOTAL()} 個章</h2>
+   <p class="fine" style="margin-top:0">看完一座島的政見卡，或聽完一位市民說話，就能蓋一個章。蓋滿可以領「桃園政策島完走證」。</p>
+   <h3 class="ph3">政策島</h3><div class="stps">${ISL.map(i=>stp(st.isl[i.id],i.name,i.kind==="ext"?"延伸":"政見 "+i.n)).join("")}</div>
+   <h3 class="ph3">市民</h3><div class="stps">${NPCS.map(p=>stp(st.done[p.id],p.name,islOf(p.isl).name)).join("")}</div>
+   <h3 class="ph3">隱藏寶物 ${nItems()}/6</h3><div class="stps">${TRS.map(t=>st.items[t.id]?stp(1,t.name,"解鎖："+t.unlock):stp(0,"？？？","尚未找到")).join("")}</div>
+   ${nItems()<6?`<p class="fine">提示：${nextHint()}</p>`:`<p class="fine">6 件寶物全部找到，解鎖金色圍巾與金色完走證！</p>`}
+   <div class="row"><button class="btn pri" id="gocert" ${ok?"":"disabled style='opacity:.45;cursor:not-allowed'"}>${ok?"領取完走證":"蓋滿才能領完走證"}</button><button class="btn" id="gochar">換裝</button></div>`);
+  if(ok)$("gocert").onclick=openCert;$("gochar").onclick=openChar}
+function openCert(){
+  open(`<div class="eyebrow" style="color:var(--gold)">完走證</div><h2 style="font-family:var(--f-display);font-weight:400;margin:4px 0 8px;font-size:26px">桃園政策島完走證</h2>
+   <label for="nick" class="fine" style="display:block;margin:0 0 6px">你的暱稱（會印在完走證上）</label>
+   <div class="row" style="margin-top:0"><input id="nick" maxlength="12" value="${(st.nick||"").replace(/"/g,"&quot;")}" placeholder="例如：中壢小企鵝" style="flex:1;min-width:0;border:1px solid var(--line);border-radius:12px;padding:10px 12px;font:inherit;background:var(--paper);color:var(--ink)"><button class="btn pri" id="mk">產生</button></div>
+   <div id="certOut" style="margin-top:14px"></div>`);
+  $("mk").onclick=()=>{st.nick=$("nick").value.trim();save();drawCert()};if(st.nick)drawCert()}
+function drawCert(){const gold=nItems()===6;const W=1080,H=1350,cv=document.createElement("canvas");cv.width=W;cv.height=H;const c=cv.getContext("2d");
+  const F='"Huninn","Noto Sans TC","PingFang TC","Microsoft JhengHei",sans-serif',FB='"Noto Sans TC","PingFang TC","Microsoft JhengHei",sans-serif';
+  const go=()=>{const acc=gold?"#c99a2e":"#2c6e80";
+  c.fillStyle="#f4ede0";c.fillRect(0,0,W,H);c.fillStyle=acc;c.fillRect(0,0,W,18);c.fillRect(0,H-18,W,18);
+  c.strokeStyle=acc;c.lineWidth=6;c.strokeRect(40,40,W-80,H-80);c.lineWidth=2;c.strokeRect(56,56,W-112,H-112);
+  c.textAlign="center";c.fillStyle=acc;c.font=`700 30px ${FB}`;c.fillText(gold?"TAOYUAN POLICY ISLAND · GOLD":"TAOYUAN POLICY ISLAND",W/2,130);
+  c.fillStyle="#1d3433";c.font=`86px ${F}`;c.fillText("桃園政策島完走證",W/2,230);
+  /* penguin */const px=W/2,py=420,sc=gold?"#e3b341":(st.look.scarf==="ribbon"?"#e8735f":"#"+(st.look.shirt>>>0).toString(16).padStart(6,"0"));
+  c.fillStyle="#26323a";c.beginPath();c.ellipse(px,py+40,95,110,0,0,7);c.fill();c.beginPath();c.arc(px,py-70,78,0,7);c.fill();
+  c.fillStyle="#fbfaf6";c.beginPath();c.ellipse(px,py+50,62,82,0,0,7);c.fill();c.beginPath();c.ellipse(px,py-62,58,50,0,0,7);c.fill();
+  c.fillStyle="#10181c";[-22,22].forEach(d=>{c.beginPath();c.arc(px+d,py-72,9,0,7);c.fill()});c.fillStyle="#f6b2a6";[-40,40].forEach(d=>{c.beginPath();c.arc(px+d,py-50,9,0,7);c.fill()});
+  c.fillStyle="#f29a38";c.beginPath();c.moveTo(px-12,py-58);c.lineTo(px+12,py-58);c.lineTo(px,py-42);c.fill();
+  c.fillStyle=sc;c.beginPath();c.ellipse(px,py-12,80,20,0,0,7);c.fill();c.fillRect(px+30,py-8,26,70);if(st.look.scarf==="ribbon"&&!gold){c.fillStyle="#2aa198";c.fillRect(px+58,py-8,22,62)}
+  if(st.look.glasses){c.strokeStyle="#2b2b2b";c.lineWidth=5;[-22,22].forEach(d=>{c.beginPath();c.arc(px+d,py-72,17,0,7);c.stroke()})}
+  c.fillStyle="#1d3433";c.font=`700 54px ${FB}`;c.fillText(st.nick||"小企鵝",W/2,640);
+  c.font=`30px ${FB}`;c.fillStyle="#4b5e5d";c.fillText("逛完了黃世杰的 6 大政見＋4 項延伸政見，聽完 12 位市民的故事",W/2,700);
+  /* stamps */const all=[...ISL.map(i=>i.name),...NPCS.map(p=>p.name)];const cols=6,cw=150,x0=W/2-cw*(cols-1)/2;
+  all.forEach((n,k)=>{const r=Math.floor(k/cols),cc=k%cols,x=x0+cc*cw,y=772+r*106;c.save();c.translate(x,y);c.rotate(((k*37)%11-5)*.03);
+    c.strokeStyle=k<ISL.length?"#d9822b":"#2c6e80";c.lineWidth=4;c.beginPath();c.arc(0,0,44,0,7);c.stroke();c.lineWidth=2;c.beginPath();c.arc(0,0,37,0,7);c.stroke();
+    c.fillStyle=c.strokeStyle;c.font=`700 ${n.length>3?20:24}px ${FB}`;c.fillText(n,0,9);c.restore()});
+  if(gold){c.fillStyle="#c99a2e";c.font=`700 34px ${FB}`;c.fillText("★ 尋寶達人：6 件隱藏寶物全數找到 ★",W/2,1190)}
+  c.fillStyle="#6b7c7b";c.font=`26px ${FB}`;const d=new Date();c.fillText(`${d.getFullYear()}.${d.getMonth()+1}.${d.getDate()}　quinnyhuang.github.io/taoyuan-policy-island`,W/2,H-96);
+  c.font=`22px ${FB}`;c.fillText("非官方網站・依公開報導整理",W/2,H-64);
+  cv.toBlob(b=>{const url=URL.createObjectURL(b);const out=$("certOut");if(!out)return;
+    out.innerHTML=`<img src="${url}" alt="桃園政策島完走證" style="width:100%;border-radius:12px;box-shadow:var(--shadow)"><p class="fine">手機請長按圖片存檔；電腦可以按「下載」。</p><div class="row"><button class="btn pri" id="shr">分享</button><a class="btn" id="dl" href="${url}" download="桃園政策島完走證.png" style="text-decoration:none">下載</a></div>`;
+    const f=new File([b],"桃園政策島完走證.png",{type:"image/png"});
+    $("shr").onclick=async()=>{try{if(navigator.canShare&&navigator.canShare({files:[f]}))await navigator.share({files:[f],title:"桃園政策島完走證",text:"我逛完桃園政策島了！"});else{toast("這個瀏覽器不支援直接分享，請長按圖片存檔或按下載。")}}catch(e){}}},"image/png")};
+  (document.fonts&&document.fonts.ready?document.fonts.ready:Promise.resolve()).then(go)}
 function openSign(){
   open(`<div class="eyebrow ext">彩蛋 · 往台北的路牌</div><h2 style="font-family:var(--f-display);font-weight:400;margin:4px 0 8px;font-size:24px">隔壁也在講客語</h2>
    <p>台北市約 40 萬客家人口。民進黨台北市長參選人沈伯洋的客語主張，包括招聘時給通過客語認證者加分或優先、推出客家幣與客家券，以及在社區共照中心讓長輩和孩子用客語互動。</p>
@@ -454,18 +515,25 @@ function openSub(isl,i){
 }
 const SHIRTS=[0xe9715d,0xf2b134,0x3f8fd2,0x7b5cd6,0x2aa198];
 function openChar(){
-  const hex=n=>"#"+n.toString(16).padStart(6,"0");
+  const hex=n=>"#"+n.toString(16).padStart(6,"0");const has=id=>!!st.items[id],gold=nItems()===6;
+  const cols=[...SHIRTS,...(has("drop")?[0x6fc3df]:[]),...(gold?[0xe3b341]:[])];
+  const hats=[["none","不戴"],["cap","棒球帽"],["dou","斗笠"],["helmet","安全帽"],...(has("pass")?[["pilot","機長帽"]]:[]),...(has("buspass")?[["driver","司機帽"]]:[]),...(has("umbrella")?[["umbrella","油紙傘"]]:[])];
+  const locked=TRS.filter(t=>!st.items[t.id]).length;
   open(`<div class="eyebrow">我的探險家</div>
    <h2 style="font-family:var(--f-display);font-weight:400;margin:4px 0 6px;font-size:24px">小企鵝</h2>
-   <p class="fine" style="margin-top:0">從機場附近海邊游上岸的小企鵝，負責帶你逛政見。</p>
-   <h3 style="font-size:13px;color:var(--muted);margin:12px 0 4px">圍巾顏色</h3>
-   <div class="sw">${SHIRTS.map(c=>`<button data-c="${c}" aria-label="顏色 ${hex(c)}" style="background:${hex(c)}" class="${st.look.shirt===c?'on':''}"></button>`).join("")}</div>
-   <h3 style="font-size:13px;color:var(--muted);margin:12px 0 4px">帽子</h3>
-   <div class="opt">${[["none","不戴"],["cap","棒球帽"],["dou","斗笠"],["helmet","安全帽"]].map(h=>`<button data-h="${h[0]}" class="${st.look.hat===h[0]?'on':''}">${h[1]}</button>`).join("")}</div>
-   <div class="row"><button class="btn pri" id="ok">完成</button></div>`);
-  $("ok").onclick=closeSheet;
-  sheet.querySelectorAll("[data-c]").forEach(b=>b.onclick=()=>{st.look.shirt=+b.dataset.c;window.applyLook&&applyLook();openChar()});
+   <p class="fine" style="margin-top:0">從機場附近海邊游上岸的小企鵝，負責帶你逛政見。找到隱藏寶物可以解鎖新造型。</p>
+   <h3 class="ph3">圍巾</h3>
+   <div class="sw">${cols.map(c=>`<button data-c="${c}" aria-label="顏色 ${hex(c)}" style="background:${hex(c)}" class="${st.look.scarf==="solid"&&st.look.shirt===c?'on':''}"></button>`).join("")}${has("ribbon")?`<button data-r="1" aria-label="世杰飄帶" class="${st.look.scarf==="ribbon"?'on':''}" style="background:linear-gradient(90deg,#2aa198 50%,#e8735f 50%)"></button>`:""}</div>
+   <h3 class="ph3">帽子</h3>
+   <div class="opt">${hats.map(h=>`<button data-h="${h[0]}" class="${st.look.hat===h[0]?'on':''}">${h[1]}</button>`).join("")}</div>
+   ${has("book")?`<h3 class="ph3">配件</h3><div class="opt"><button data-g="1" class="${st.look.glasses?'on':''}">四姐同款圓框眼鏡</button></div>`:""}
+   ${locked?`<p class="fine">還有 ${locked} 件造型等你解鎖。🔎 ${nextHint()}</p>`:`<p class="fine">全部造型都解鎖了，金色圍巾送給尋寶達人！</p>`}
+   <div class="row"><button class="btn pri" id="ok">完成</button><button class="btn" id="gp">集章護照</button></div>`);
+  $("ok").onclick=closeSheet;$("gp").onclick=openPassport;
+  sheet.querySelectorAll("[data-c]").forEach(b=>b.onclick=()=>{st.look.shirt=+b.dataset.c;st.look.scarf="solid";window.applyLook&&applyLook();openChar()});
+  const rb=sheet.querySelector("[data-r]");if(rb)rb.onclick=()=>{st.look.scarf="ribbon";window.applyLook&&applyLook();openChar()};
   sheet.querySelectorAll("[data-h]").forEach(b=>b.onclick=()=>{st.look.hat=b.dataset.h;window.applyLook&&applyLook();openChar()});
+  const gb=sheet.querySelector("[data-g]");if(gb)gb.onclick=()=>{st.look.glasses=!st.look.glasses;window.applyLook&&applyLook();openChar()};
 }
 const INTRO=[
  ["HELLO, TAOYUAN · 01","政見不只能讀，也能逛","10 座政策島裡，6 座是黃世杰的六大政見，4 座是延伸政見；島上標著 ①②③ 的建築和道具，就是每項政見的具體目標。12 位市民散落在島上，四姐會在各島的肥皂箱之間巡迴。"],
@@ -478,7 +546,7 @@ function intro(i=0){
   $("skip").onclick=()=>$("intro").hidden=true;
   $("nxt").onclick=()=>{if(i<INTRO.length-1)intro(i+1);else $("intro").hidden=true};
 }
-$("bIndex").onclick=openIndex;$("bChar").onclick=openChar;
+$("bIndex").onclick=openIndex;$("pPass").onclick=openPassport;$("bChar").onclick=openChar;
 $("bOverview").onclick=()=>window.setMode&&setMode(!st.overview);
 
 function renderIdx(q=""){q=q.trim().toLowerCase();const hit=i=>!q||[i.name,i.card.t,i.card.sum,...i.card.pts,...i.subs.flat()].join(" ").toLowerCase().includes(q);
@@ -835,7 +903,9 @@ function penguin(){
   const bk=mesh(new THREE.ConeGeometry(.1,.26,10),0xf29a38,0,-.09,.64,head);bk.rotation.x=Math.PI/2;
   const sc=mesh(new THREE.TorusGeometry(.4,.11,8,18),st.look.shirt,0,1.45,0,body);sc.rotation.x=Math.PI/2;
   const tailG=new THREE.Group();tailG.position.set(.22,1.4,.4);body.add(tailG);const tail=rbox(.3,.5,.12,st.look.shirt,0,-.5,0,tailG,.05);tailG.rotation.z=-.3;
-  g.userData={L,A,body,head,eyes,hatParent:head,hatOff:.36,scarf:[sc,tail],tailG,blink:2};return g;
+  const tail2=rbox(.26,.44,.12,0x2aa198,.12,-.46,.05,tailG,.05);tail2.rotation.z=.3;tail2.visible=false;const tip=box(.27,.08,.13,0xd7e35a,0,-.74,0,tailG);tip.visible=false;
+  const gl=new THREE.Group();head.add(gl);[-.13,.13].forEach(x=>{const r=mesh(new THREE.TorusGeometry(.1,.02,8,16),0x2b2b2b,x,.03,.555,gl,false)});box(.08,.02,.02,0x2b2b2b,0,.04,.56,gl);gl.visible=false;
+  g.userData={L,A,body,head,eyes,hatParent:head,hatOff:.36,scarf:[sc,tail],tail2,tip,gl,tailG,blink:2};return g;
 }
 function setHat(g,kind){
   const ud=g.userData,par=ud.hatParent||g;
@@ -844,6 +914,9 @@ function setHat(g,kind){
   if(kind==="cap"){mesh(new THREE.SphereGeometry(.48,14,8,0,Math.PI*2,0,Math.PI/2),0x1f7a74,0,0,0,h);rbox(.5,.06,.5,0x1f7a74,0,0,.45,h,.03)}
   if(kind==="dou")cone(.95,.5,0xd9b86a,0,-.05,0,h,14);
   if(kind==="helmet"){mesh(new THREE.SphereGeometry(.54,14,8,0,Math.PI*2,0,Math.PI/2),0xf2b134,0,-.05,0,h);cyl(.6,.6,.05,0xf2b134,0,-.05,0,h,16)}
+  if(kind==="pilot"){cyl(.42,.36,.22,0x1f2f4a,0,-.02,0,h,16);cyl(.5,.5,.06,0x1f2f4a,0,.18,0,h,16);rbox(.5,.05,.28,0x111a2a,0,-.02,.4,h,.03);box(.18,.1,.04,0xe3b341,0,.08,.4,h)}
+  if(kind==="driver"){cyl(.44,.4,.24,0x2c6e80,0,-.02,0,h,16);rbox(.52,.05,.3,0x1d3433,0,-.02,.42,h,.03);box(.6,.06,.06,0xf2c94c,0,.08,.38,h)}
+  if(kind==="umbrella"){cyl(.025,.025,1.2,0x8a6a4f,.55,-.6,0,h,6);const u=cone(.95,.42,0xd64545,.55,.55,0,h,16);cone(.96,.05,0xf2c94c,.55,.55,0,h,16);sph(.06,0x8a6a4f,.55,.98,0,h,6)}
 }
 function blink(ud,dt){ud.blink-=dt;const s=ud.blink<0&&ud.blink>-.13?.15:1;ud.eyes.forEach(e=>e.scale.y=s);if(ud.blink<-.13)ud.blink=2.5+Math.random()*3}
 
@@ -947,7 +1020,7 @@ function plane(p){const g=new THREE.Group();p.add(g);const W=0xfbfcfc,BL=0x8fd0e
   const fin=rbox(1,1.2,.12,W,-2.9,.85,0,g,.1);fin.rotation.z=-.5;const fs=box(.6,.12,.13,0x2c6e80,-2.85,1,0,g);fs.rotation.z=-.5;
   return g}
 [-12,-5].forEach(x=>{const pl=plane(air);pl.position.set(x,-4.6,5.4);pl.rotation.y=-Math.PI/2});
-const tko=plane(air),lnd=plane(air);tko.rotation.y=lnd.rotation.y=Math.PI;
+window.__plane=plane;const tko=plane(air),lnd=plane(air);tko.rotation.y=lnd.rotation.y=Math.PI;
 [[tko,"penguin","飛往友站・桃園小企鵝","#2f8f8a"],[lnd,"hexcity","飛往友站・六邊形小城","#d9645b"]].forEach(([pl,k,txt,colr])=>{
   const rope=box(2.2,.03,.03,0x8a8f94,-4.5,.1,0,pl);const bn=sign(txt,5.2,1.1,colr,"#fff",-8.3,.1,0,pl,{fs:60});bn.material.side=THREE.DoubleSide;bn.material.transparent=false;
   ANIM.push(t=>{bn.rotation.x=Math.sin(t*5+k.length)*.12;bn.position.y=.1+Math.sin(t*4)*.08});
@@ -1010,8 +1083,24 @@ function bossStep(dt,t,px,pz){
 const HK=ISLX.hakka;const [sgx,sgz]=C(HK,30,3.6);
 cyl(.08,.08,2.4,0x8a6a4f,sgx,0,sgz,null,6);rbox(1.8,.45,.1,0xffffff,sgx+.5,1.7,sgz,null,.08);sign("往台北 →",1.6,.36,"#3d6e52","#fff",sgx+.5,1.93,sgz+.06);col(sgx,sgz,.4);
 label("往台北 →","sub ext",new THREE.Vector3(sgx,3,sgz),openSign,"sub");
-const YX=ISLX.youth;const [bkx,bkz]=C(YX,150,3.6);const book=new THREE.Group();book.position.set(bkx,.5,bkz);scene.add(book);rbox(.6,.18,.8,0xb23b2f,0,0,0,book,.04);box(.62,.05,.82,0xf2e6c8,0,.09,0,book);
-book.visible=!st.book;
+/* hidden treasures */
+function freeSpot(X){for(const r of [3.4,4.6,2.6,5.4])for(let a=150;a<510;a+=30){const [x,z]=C(X,a,r);if(walkable(x,z)&&!COL.some(c=>Math.hypot(c[0]-x,c[1]-z)<c[2]+1.1)&&!npcObjs.some(n=>Math.hypot(n.obj.position.x-x,n.obj.position.z-z)<1.2))return [x,z]}return C(X,150,3.4)}
+const TRM={book(g){rbox(.6,.18,.8,0xb23b2f,0,0,0,g,.04);box(.62,.05,.82,0xf2e6c8,0,.09,0,g)},
+ pass(g){rbox(.9,.04,.5,0xffffff,0,0,0,g,.03);box(.28,.045,.5,0x2c6e80,-.31,0,0,g);box(.4,.05,.06,0x9aa3a8,.12,.01,.1,g);box(.3,.05,.06,0x9aa3a8,.08,.01,-.06,g)},
+ umbrella(g){cyl(.02,.02,.9,0x8a6a4f,0,-.45,0,g,6);cone(.55,.28,0xd64545,0,0,0,g,14);cone(.56,.04,0xf2c94c,0,0,0,g,14)},
+ buspass(g){rbox(.8,.05,.5,0xe9715d,0,0,0,g,.05);box(.2,.06,.2,0xf2c94c,-.22,0,0,g);box(.34,.06,.05,0xffffff,.15,0,.08,g)},
+ drop(g){const d=sph(.3,new THREE.MeshStandardMaterial({color:0x6fc3df,transparent:true,opacity:.85,roughness:.15,emissive:0x2c8fb0,emissiveIntensity:.25}),0,0,0,g,16);d.scale.set(1,1.15,1);const t=mesh(new THREE.ConeGeometry(.22,.4,16),d.material,0,.38,0,g);sph(.07,0xffffff,-.1,.08,.26,g,8)},
+ ribbon(g){const a=rbox(.18,.8,.05,0xe8735f,-.1,-.4,0,g,.03);a.rotation.z=.35;const b=rbox(.18,.8,.05,0x2aa198,.1,-.4,0,g,.03);b.rotation.z=-.35;sph(.13,0xe8735f,0,.02,0,g,10);box(.18,.08,.06,0xd7e35a,-.28,-.78,0,g);box(.18,.08,.06,0xd7e35a,.28,-.78,0,g)}};
+const TRO=TRS.map(t=>{const X=ISLX[t.isl];const [x,z]=freeSpot(X);const g=new THREE.Group();g.position.set(x,.6,z);scene.add(g);TRM[t.id](g);g.visible=!st.items[t.id];
+  const glow=new THREE.Mesh(new THREE.CircleGeometry(.7,20),new THREE.MeshBasicMaterial({color:0xfff2b0,transparent:true,opacity:.45}));glow.rotation.x=-Math.PI/2;glow.position.set(x,.05,z);glow.visible=g.visible;scene.add(glow);return {t,g,glow,x,z}});
+function celebrate(){if(RM)return;let k=0;const tm=setInterval(()=>{const p=player.position;burst(p.x+(Math.random()-.5)*8,6+Math.random()*4,p.z+(Math.random()-.5)*8);if(++k>=6)clearInterval(tm)},700);
+  if(!window.__plane)return;const pl=__plane(scene);pl.scale.setScalar(1.6);const bn=sign("謝謝你逛完桃園政策島",7,1.3,"#c99a2e","#fff",-9.5,.1,0,pl,{fs:58});bn.material.side=THREE.DoubleSide;box(2.4,.03,.03,0x8a8f94,-5.2,.1,0,pl);
+  pl.rotation.y=Math.PI;const p0=player.position.clone();let T=0;ANIM.push((t,dt)=>{if(!pl.visible)return;T+=dt;pl.position.set(p0.x+60-T*9,16,p0.z-6);bn.rotation.x=Math.sin(t*5)*.12;if(T>14){pl.visible=false}})}
+function pickItem(o){st.items[o.t.id]=1;o.g.visible=o.glow.visible=false;burst(o.x,1,o.z);save();progress();
+  if(o.t.id==="ribbon"){st.look.scarf="ribbon";applyLook()}const n=nItems();if(n===6){toast("6 件寶物全部找到！解鎖金色圍巾與金色完走證 ✨",5200);st.look.shirt=0xe3b341;st.look.scarf="solid";applyLook();celebrate()}
+  else toast(`${o.t.msg}（寶物 ${n}/6，解鎖「${o.t.unlock}」）`,4600);
+}
+
 const egg=new THREE.Group();scene.add(egg);egg.visible=false;{const bm=busModel(0xb5432f,1);egg.add(bm);var eggW=bm.userData.W}
 let eggT=-1;const eggA=new THREE.Vector3(),eggB=new THREE.Vector3();const busS={mode:"off",t:0,wp:null,hub:null,head:0};
 window.busEgg=()=>{if(busS.mode!=="off")return;const h=hubAt(boss.position.x,boss.position.z)||ISLX.traffic.hub;const b=BRIDGES.find(b=>(b.ax===h.x&&b.az===h.z)||(b.bx===h.x&&b.bz===h.z));
@@ -1033,8 +1122,8 @@ function openRide(){const here=islOfHub(busS.hub);
 const player=penguin();scene.add(player);
 {const X=ISLX.traffic,[x,z]=C(X,150,2.4);player.position.set(x,0,z)}
 const shadowDisc=new THREE.Mesh(new THREE.CircleGeometry(.6,20),new THREE.MeshBasicMaterial({color:0x000000,transparent:true,opacity:.18}));shadowDisc.rotation.x=-Math.PI/2;scene.add(shadowDisc);
-window.applyLook=()=>{player.userData.scarf.forEach(m=>m.material=mat(st.look.shirt));setHat(player,st.look.hat);try{localStorage.setItem("tyLook2",JSON.stringify(st.look))}catch(e){}};
-setHat(player,st.look.hat);
+window.applyLook=()=>{const u=player.userData,rib=st.look.scarf==="ribbon";u.scarf[0].material=mat(rib?0xe8735f:st.look.shirt);u.scarf[1].material=mat(rib?0xe8735f:st.look.shirt);u.tail2.visible=u.tip.visible=rib;u.gl.visible=!!st.look.glasses;setHat(player,st.look.hat);try{localStorage.setItem("tyLook2",JSON.stringify(st.look))}catch(e){}};
+applyLook();
 const meLab=label("<b>你，</b>小企鵝","me",new THREE.Vector3(),null,"me");
 let sbMode=false;
 function travelPt(x,z,done){if(sbMode)setMode(false);st.auto={wp:route(player.position.x,player.position.z,x,z),done}}
@@ -1140,7 +1229,7 @@ function step(){
   const bnear=bossStep(dt,t,px,pz);
   if(bnear){const bd=Math.hypot(boss.position.x-px,boss.position.z-pz);if(bd<nd){nd=bd;near={label:"和四姐聊聊",act:()=>openBoss()}}}
   if(!sbMode){const sd=Math.hypot(sgx-px,sgz-pz);if(sd<2.6&&sd<nd){nd=sd;near={label:"看路牌",act:openSign}}}
-  if(!st.book){book.rotation.y=t;book.position.y=.6+Math.sin(t*3)*.12;if(!sbMode&&Math.hypot(bkx-px,bkz-pz)<1.4){st.book=true;book.visible=false;progress();burst(bkx,1,bkz);toast("撿到一本「行動小六法」！去找四姐問問吧。",4200)}}
+  TRO.forEach((o,k)=>{if(st.items[o.t.id])return;o.g.rotation.y=t*1.2;o.g.position.y=.7+Math.sin(t*3+k)*.12;o.glow.material.opacity=.3+Math.sin(t*3+k)*.15;if(!sbMode&&Math.hypot(o.x-px,o.z-pz)<1.4)pickItem(o)});
   st.near=near;
   const tb=$("talk");if(near&&sheet.hidden){tb.hidden=false;tb.textContent=near.label;tb.onclick=near.act}else tb.hidden=true;
   /* bus: arrive → wait → (boarding) → ride → leave */
