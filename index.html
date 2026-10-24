@@ -357,7 +357,7 @@ function openTalk(p,i=0){
   $("sk").onclick=()=>{markNpc(p);openCard(isl)};
   if(i===p.lines.length-1)markNpc(p);
 }
-function markNpc(p){if(!st.done[p.id]){st.done[p.id]=1;progress();window.markDone&&markDone(p);if(NPCS.every(q=>st.done[q.id]))toast("12 位市民都聽完了！去找四姊聊聊吧。",4200)}}
+function markNpc(p){if(!st.done[p.id]){st.done[p.id]=1;progress();window.markDone&&markDone(p);if(NPCS.every(q=>st.done[q.id]))toast("12 位市民都聽完了！去找四姐聊聊吧。",4200)}}
 function openCard(isl,hl=-1){
   const c=isl.card,ext=isl.kind==="ext";
   const npcs=NPCS.filter(p=>p.isl===isl.id);
@@ -384,11 +384,11 @@ function openIndex(){
    <p class="fine">競選主軸「心桃園，動起來」，願景「國門心都，世界桃園」。</p>${srcList(["c0727","r0907","u1003"])}`);
   sheet.querySelectorAll(".idx button").forEach(b=>b.onclick=()=>{const i=islOf(b.dataset.id);closeSheet();travelIsl(i,true)});
 }
-/* 四姊 */
+/* 四姐 */
 function openBoss(step=0){
-  const L=["嗨！我是四姊，依桃園市長參選人黃世杰的形象設計的角色。我會在各島的肥皂箱之間跑來跑去，跟大家聊政見。","這裡有六大政見和四項延伸政見，島上的編號物件是具體目標，12 位市民會告訴你每項政見在說什麼。","想先認識我，還是直接看政見總覽？"];
+  const L=["嗨！我是四姐，依桃園市長參選人黃世杰的形象設計的角色。我會在各島的肥皂箱之間跑來跑去，跟大家聊政見。","這裡有六大政見和四項延伸政見，島上的編號物件是具體目標，12 位市民會告訴你每項政見在說什麼。","想先認識我，還是直接看政見總覽？"];
   const all=NPCS.every(p=>st.done[p.id]);
-  open(`<div class="npc-head"><div><div class="eyebrow" style="color:var(--gold)">巡迴中</div><h2>四姊</h2><small>依黃世杰形象設計的角色；台詞由本頁撰寫，不是本人發言</small></div></div>
+  open(`<div class="npc-head"><div><div class="eyebrow" style="color:var(--gold)">巡迴中</div><h2>四姐</h2><small>依黃世杰形象設計的角色；台詞由本頁撰寫，不是本人發言</small></div></div>
    <div class="bubble">${step<L.length?L[step]:(all?"12 位市民都聽完了，謝謝你逛完整座島！":L[2])}${st.book&&step>=L.length-1?"<br><br>咦，你撿到「行動小六法」了？那是學弟沈伯洋在文宣上給我取的綽號。":""}</div>
    <div class="row">${step<L.length-1?`<button class="btn pri" id="bn">繼續（${step+1}/${L.length}）</button>`:`
      <button class="btn pri" id="b1">學經歷</button><button class="btn sec" id="b2">政見總覽</button><button class="btn gold" id="b3">叫公車</button><button class="btn gold" id="b4">建中同學是誰？</button>`}</div>`);
@@ -397,11 +397,11 @@ function openBoss(step=0){
   if(b1){
     b1.onclick=openCV;$("b2").onclick=openIndex;
     $("b3").onclick=()=>{closeSheet();window.busEgg&&busEgg()};
-    $("b4").onclick=()=>{open(`<div class="npc-head"><div><h2>四姊</h2><small>彩蛋</small></div></div><div class="bubble">我和台北市長蔣萬安是建中高二、高三的同班同學。</div><p class="fine">依黃世杰競選文宣自述。</p><div class="row"><button class="btn" id="bb">回去</button></div>`);$("bb").onclick=()=>openBoss(9)};
+    $("b4").onclick=()=>{open(`<div class="npc-head"><div><h2>四姐</h2><small>彩蛋</small></div></div><div class="bubble">我和台北市長蔣萬安是建中高二、高三的同班同學。</div><p class="fine">依黃世杰競選文宣自述。</p><div class="row"><button class="btn" id="bb">回去</button></div>`);$("bb").onclick=()=>openBoss(9)};
   }
 }
 function openCV(){
-  open(`<div class="eyebrow" style="color:var(--gold)">四姊 · 學經歷</div><h2 style="font-family:var(--f-display);font-weight:400;margin:4px 0 8px;font-size:24px">學歷看實力，經歷看治理</h2>
+  open(`<div class="eyebrow" style="color:var(--gold)">四姐 · 學經歷</div><h2 style="font-family:var(--f-display);font-weight:400;margin:4px 0 8px;font-size:24px">學歷看實力，經歷看治理</h2>
    
    <div class="cv">${CV.map(c=>`<div><span>${c[0]}</span></div>`).join("")}</div>
    <h3 style="font-size:13px;color:var(--muted);margin:14px 0 6px">出處</h3>${srcList(["ly"])}
@@ -436,8 +436,8 @@ function openChar(){
   sheet.querySelectorAll("[data-h]").forEach(b=>b.onclick=()=>{st.look.hat=b.dataset.h;window.applyLook&&applyLook();openChar()});
 }
 const INTRO=[
- ["HELLO, TAOYUAN · 01","政見不只能讀，也能逛","內圈六座島是黃世杰的六大政見，外圈四座是延伸政見；島上標著 ①②③ 的建築和道具，就是每項政見的具體目標。12 位市民散落在島上，四姊會在各島的肥皂箱之間巡迴。"],
- ["HELLO, TAOYUAN · 02","每張政見卡都有出處","市民是虛構角色，台詞轉述自公開報導；四姊是依候選人形象設計的角色。右上角「沙盤」可以切換成俯瞰模式，拖曳、縮放整座島群。這不是候選人或政黨的官方網站。"]
+ ["HELLO, TAOYUAN · 01","政見不只能讀，也能逛","內圈六座島是黃世杰的六大政見，外圈四座是延伸政見；島上標著 ①②③ 的建築和道具，就是每項政見的具體目標。12 位市民散落在島上，四姐會在各島的肥皂箱之間巡迴。"],
+ ["HELLO, TAOYUAN · 02","每張政見卡都有出處","市民是虛構角色，台詞轉述自公開報導；四姐是依候選人形象設計的角色。右上角「沙盤」可以切換成俯瞰模式，拖曳、縮放整座島群。這不是候選人或政黨的官方網站。"]
 ];
 function intro(i=0){
   const c=INTRO[i];
@@ -836,10 +836,10 @@ const H0=S(640,590),NR={x:.45,y:.89},EX=S(1140,0)[0];
 /* reservoir */
 const RD=new THREE.Vector2(.55,.835).normalize(),RP=new THREE.Vector2(-RD.y,RD.x);const [dmx,dmz]=S(830,730);const LV=5;
 const toW=(a,b)=>[dmx+RD.x*a+RP.x*b,dmz+RD.y*a+RP.y*b];
-const main=[],arms=[];for(let k=0;k<=16;k++){const a=k*4.2;main.push([a,Math.sin(k*.42)*8+Math.sin(k*.17)*4,2.6+Math.min(k,7)*.95+Math.sin(k*.9)*1.3])}
+const main=[],arms=[];for(let k=0;k<=16;k++){const a=3.2+k*4.2;main.push([a,Math.sin(k*.42)*8+Math.sin(k*.17)*4,2.6+Math.min(k,7)*.95+Math.sin(k*.9)*1.3])}
 [[6,1],[10,-1],[13,1]].forEach(([k0,sg])=>{const [a0,b0]=main[k0];const arm=[];for(let j=1;j<=6;j++)arm.push([a0+j*2.2,b0+sg*j*3.3,Math.max(1.4,4.4-j*.45)]);arms.push(arm)});
 const LK=[...main,...arms.flat()].map(([a,b,w])=>{const [x,z]=toW(a,b);return [x,z,w]});
-const LCX=LK.reduce((q,p)=>q+p[0],0)/LK.length,LCZ=LK.reduce((q,p)=>q+p[1],0)/LK.length;
+const [BCX,BCZ]=toW(48,0);const W0D=main[0][2]+3.2;
 const inLake=(x,z)=>{let m=1e9;for(const [px,pz,w] of LK){const d=Math.hypot(x-px,z-pz)-w;if(d<m)m=d}return m};
 const RIV=[];{let x=dmx-RD.x*3,z=dmz-RD.y*3;for(let k=0;k<70;k++){RIV.push([x,z]);if(x<coastX(z)-6)break;if(k<6){x+=-RD.x*3;z+=-RD.y*3}else{x+=-3+Math.sin(k*.5)*.6;z+=Math.cos(k*.45)*1.4+.35}}}
 const inRiv=(x,z)=>{let m=1e9;for(const [px,pz] of RIV){const d=Math.hypot(x-px,z-pz)-1.7;if(d<m)m=d}return m};
@@ -849,10 +849,12 @@ const pr=(p,a)=>1+Math.sin(a*2+p.sd)*.13+Math.sin(a*3+p.sd*2.3)*.07;
 function inPond(x,z){let best=9;for(const p of PONDS){const dx=x-p.x,dz=z-p.z,c=Math.cos(p.rot),s=Math.sin(p.rot);const lx=dx*c-dz*s,lz=dx*s+dz*c;const a=Math.atan2(lz/p.rz,lx/p.rx);const rr=Math.hypot(lx/p.rx,lz/p.rz)/pr(p,a);if(rr<best)best=rr}return best}
 function hgt(x,z){const d=x-coastX(z);if(d<0)return Math.max(-14,-6.6+d*.9);
   let h=d<3?-6.6+d*.13:-6.2;
-  const m=Math.max((x-H0[0])*NR.x+(z-H0[1])*NR.y-16,(x-EX)*.8,0);
-  if(m>0)h+=Math.min(m,26)*.62+Math.max(0,m-26)*.32+nz(x,z)*Math.min(1,m/14)*5+Math.max(0,m-30)*.12*(1+nz(x*.7,z*.7));
-  if(m>0){const dc=Math.hypot(x-LCX,z-LCZ);h+=18*Math.exp(-(dc/52)*(dc/52))*Math.min(1,m/10)}
+  const m=Math.max((x-H0[0])*NR.x+(z-H0[1])*NR.y-22,(x-EX)*.8,0);
+  if(m>0)h+=Math.min(m,26)*.48+Math.max(0,m-26)*.32+nz(x,z)*Math.min(1,m/14)*5+Math.max(0,m-30)*.12*(1+nz(x*.7,z*.7));
+  const ua=(x-dmx)*RD.x+(z-dmz)*RD.y,ub=(x-dmx)*RP.x+(z-dmz)*RP.y;
+  if(m>0){const dc=Math.hypot(x-BCX,z-BCZ);h+=18*Math.exp(-(dc/48)*(dc/48))*Math.min(1,m/10)*Math.min(1,Math.max(0,(ua+4)/26))}
   const dl=inLake(x,z);if(dl<0)h=LV-2.4;else if(dl<8&&m>3)h=Math.max(h,LV+.8+dl*.55);
+  if(ua<.6&&ua>-60&&Math.abs(ub)<W0D+5-ua*.25)h=Math.min(h,-5.9+Math.max(0,Math.abs(ub)-W0D-1)*.6);
   const dr=inRiv(x,z);if(dr<0)h=Math.min(h,-7.5);else if(dr<2.5&&h<LV)h=Math.min(h,-6.9+dr*.3);
   const pp=inPond(x,z);if(pp<1)h=-7.5;else if(pp<1.25)h=Math.min(h,-6.45);
   return h}
@@ -870,12 +872,17 @@ const bI=new THREE.InstancedMesh(new THREE.IcosahedronGeometry(1,0),matF(0x6aa45
 const lm=new THREE.MeshStandardMaterial({color:0x5fb3ab,roughness:.22});const cgeo=new THREE.CircleGeometry(1,28);
 const LI=new THREE.InstancedMesh(cgeo,lm,LK.length*2);let li=0;dm.rotation.set(-Math.PI/2,0,0);LK.forEach(([x,z,w])=>{dm.position.set(x,LV,z);dm.scale.set(w+1.2,w+1.2,1);dm.updateMatrix();LI.setMatrixAt(li++,dm.matrix)});
 for(let k=0;k<LK.length-1;k++){const a=LK[k],b=LK[k+1];if(Math.hypot(a[0]-b[0],a[1]-b[1])>6)continue;dm.position.set((a[0]+b[0])/2,LV,(a[1]+b[1])/2);const w=(a[2]+b[2])/2+1.2;dm.scale.set(w,w,1);dm.updateMatrix();LI.setMatrixAt(li++,dm.matrix)}LI.count=li;dm.rotation.set(0,0,0);dm.scale.set(1,1,1);scene.add(LI);
-const W0=main[0][2]+3.2,damG=new THREE.Group();damG.position.set(dmx,0,dmz);damG.rotation.y=Math.atan2(RD.x,RD.y);scene.add(damG);
-for(let k=-7;k<=7;k++){const b=k/7*W0,a=-Math.abs(k/7)*1.6;const m=box(W0/7*1.15,LV+7.2,2.2,0xd3d6d2,b,-7,a,damG);m.rotation.y=k/7*.35}
-rbox(W0*2+1.5,.35,1.2,0x9aa1a6,0,LV+.2,-.3,damG,.1);for(let k=-6;k<=6;k++)box(.12,.5,.12,0xffffff,k/6*W0,LV+.55,.25,damG);
-const ch=rbox(3.4,.5,12,0xe3e6e4,W0+3.2,0,-6,damG,.15);ch.position.y=LV-3.6;ch.rotation.x=-.55;
-const fl=box(2.6,.06,11.5,0xffffff,W0+3.2,0,-6,damG);fl.position.y=LV-3.2;fl.rotation.x=-.55;fl.material=new THREE.MeshStandardMaterial({color:0xe9f7fb,transparent:true,opacity:.8});
+const DAMM=new THREE.MeshStandardMaterial({color:0xeef0eb,roughness:.7,emissive:0x5a5f5c,emissiveIntensity:.35});const W0=main[0][2]+3.2,damG=new THREE.Group();damG.position.set(dmx,0,dmz);damG.rotation.y=Math.atan2(RD.x,RD.y);scene.add(damG);
+for(let k=-7;k<=7;k++){const b=k/7*(W0+2),a=-Math.abs(k/7)*1.8;const m=box((W0+2)/7*1.2,LV+7.2,2.4,DAMM,b,-7,a,damG);m.rotation.y=k/7*.35;for(let y=-4.5;y<LV;y+=2.2){const st=box((W0+2)/7*1.22,.18,.05,0xc4c8c3,b,y,a-1.22,damG);st.rotation.y=k/7*.35}}
+rbox(W0*2+5.5,.35,1.4,0x9aa1a6,0,LV+.2,-.3,damG,.1);for(let k=-8;k<=8;k++){box(.12,.5,.12,0xffffff,k/8*(W0+2),LV+.55,.35,damG);box(.12,.5,.12,0xffffff,k/8*(W0+2),LV+.55,-.95,damG)}
+
 [-1,1].forEach(s=>box(1.2,2.4,1.2,0xc9cdc8,s*(W0+.8),LV-.4,-.2,damG));
+rbox(4,2.2,2.6,0xf2efe6,-W0*.45,LV+.3,-.4,damG,.15);rbox(4.3,.3,2.9,0x2c6e80,-W0*.45,LV+2.5,-.4,damG,.08);sign("石門水庫",3.2,.6,"#2c6e80","#fff",-W0*.45,LV+1.6,-1.75,damG,{ry:Math.PI});
+const FW=new THREE.MeshStandardMaterial({color:0xdff3f7,transparent:true,opacity:.85,emissive:0x9fd4e6,emissiveIntensity:.3});for(let k=0;k<5;k++){const gx=W0*.15+k*1.2;rbox(.9,1.4,.5,0x7d8a90,gx,LV-.9,-1.4,damG,.05);box(1.1,.3,.6,0xd64545,gx,LV+.5,-1.4,damG);const f=box(.7,LV+5.6,.12,FW,gx,-5.9,-1.75,damG);f.rotation.x=.12}
+const ph=new THREE.Group();ph.position.set(-W0*.2,0,-7);damG.add(ph);rbox(6,2.6,3.6,0xe8e4d8,0,-5.9,0,ph,.2);rbox(6.3,.3,3.9,0x7d8a90,0,-3.3,0,ph,.08);
+[-1.6,0,1.6].forEach(o=>{const pp=mesh(new THREE.CylinderGeometry(.32,.32,8,10),0x8e979b,o,(LV-5.9)/2,3.6,ph);pp.rotation.x=1.05});
+const spray=[];for(let k=0;k<10;k++){const d=sph(.35,0xffffff,0,0,0,damG,8);d.material=new THREE.MeshStandardMaterial({color:0xffffff,transparent:true,opacity:.7});spray.push(d)}
+ANIM.push(t=>spray.forEach((d,k)=>{const T=(t*.7+k/10)%1;d.position.set(W0*.15+2.4+Math.sin(k*2.3)*1.4,-5.3+Math.sin(T*Math.PI)*1.4,-3.2-T*3.5);d.scale.setScalar(.6+T)}));
 {const [x,z]=toW(26,0);label("石門水庫","deco",new THREE.Vector3(x,LV+6,z),null,"deco")}
 /* pond reeds */
 PONDS.forEach((p,k)=>{for(let r=0;r<12;r++){const a=r/12*Math.PI*2+p.sd,f=pr(p,a)*1.12,lx=Math.cos(a)*p.rx*f,lz=Math.sin(a)*p.rz*f,c=Math.cos(-p.rot),s=Math.sin(-p.rot);cyl(.05,.05,.9+((r*7)%5)*.12,0x7a9a4f,p.x+lx*c-lz*s,-6.5,p.z+lx*s+lz*c,null,4)}if(k===0)label("埤塘","deco",new THREE.Vector3(p.x,-3,p.z),null,"deco")});
@@ -909,7 +916,7 @@ ANIM.push(t=>boats.forEach((b,i)=>{const L=z1-z0,dir=i%2?1:-1;const z=z0+((((t*1
 
 /* ---- boss patrol ---- */
 const boss=bossModel();scene.add(boss);
-const bossLab=label("四姊","boss",new THREE.Vector3(),()=>{if(sbMode){openBoss();return}travelPt(boss.position.x+1.6,boss.position.z+1.6,()=>openBoss())},"npc");
+const bossLab=label("四姐","boss",new THREE.Vector3(),()=>{if(sbMode){openBoss();return}travelPt(boss.position.x+1.6,boss.position.z+1.6,()=>openBoss())},"npc");
 const bubble=label("","bubble",new THREE.Vector3(),null,"bubble");
 const TOUR=["industry","traffic","senior","youth","mrt","cam","child","medic","hakka","trash"];
 const LINES=["來，聽我說說這座島的政見！","有問題都可以來問我。","島上有編號的東西都是具體目標，點點看。"];
@@ -919,7 +926,7 @@ pick(boss,()=>sbMode?openBoss():travelPt(boss.position.x+1.6,boss.position.z+1.6
 function bossGo(){bs.i=(bs.i+1)%TOUR.length;const S=SOAP[TOUR[bs.i]];const a=Math.atan2(S.hz-S.z,S.hx-S.x);bs.wp=route(boss.position.x,boss.position.z,S.x+Math.cos(a)*1.5,S.z+Math.sin(a)*1.5);bs.mode="down";bs.hop=0;bs.from={x:boss.position.x,z:boss.position.z}}
 function bossStep(dt,t,px,pz){
   const near=!sbMode&&Math.hypot(boss.position.x-px,boss.position.z-pz)<4.2;
-  const talking=!sheet.hidden&&sheet.innerHTML.includes("四姊");
+  const talking=!sheet.hidden&&sheet.innerHTML.includes("四姐");
   const ud=boss.userData;let walking=false;
   if(bs.mode==="speak"){boss.position.y=.62;if(!talking&&!near)bs.t-=dt;else bs.t=Math.max(bs.t,3);
     ud.A[0].rotation.x=-2.3+Math.sin(t*3.2)*.35;ud.A[1].rotation.x=Math.sin(t*1.6)*.2-.2;ud.body.rotation.z=Math.sin(t*1.6)*.04;
@@ -939,7 +946,7 @@ function bossStep(dt,t,px,pz){
   blink(ud,dt);
   bossLab.anchor.set(boss.position.x,boss.position.y+3.2,boss.position.z);
   bubble.anchor.set(boss.position.x,boss.position.y+4.2,boss.position.z);
-  const S=SOAP[TOUR[bs.i]];bubble.show=bs.mode==="speak";bubble.el.textContent=bs.mode==="speak"?`四姊在${S.name}島：${LINES[bs.line]}`:"";
+  const S=SOAP[TOUR[bs.i]];bubble.show=bs.mode==="speak";bubble.el.textContent=bs.mode==="speak"?`四姐在${S.name}島：${LINES[bs.line]}`:"";
   return near;
 }
 
@@ -953,10 +960,10 @@ const egg=new THREE.Group();scene.add(egg);egg.visible=false;rbox(4.4,1.5,1.8,0x
 let eggT=-1;const eggA=new THREE.Vector3(),eggB=new THREE.Vector3();const busS={mode:"off",t:0,wp:null,hub:null,head:0};
 window.busEgg=()=>{if(busS.mode!=="off")return;const h=hubAt(boss.position.x,boss.position.z)||ISLX.traffic.hub;const b=BRIDGES.find(b=>(b.ax===h.x&&b.az===h.z)||(b.bx===h.x&&b.bz===h.z));
   const mine=b.ax===h.x&&b.az===h.z,ox=mine?b.bx:b.ax,oz=mine?b.bz:b.az;const dx=ox-h.x,dz=oz-h.z,L=Math.hypot(dx,dz);
-  eggA.set(h.x+dx/L*(h.ap+6),0,h.z+dz/L*(h.ap+6));eggB.set(h.x+dx/L*(h.ap-3.4),0,h.z+dz/L*(h.ap-3.4));eggT=0;egg.visible=true;busS.mode="arrive";busS.hub=h;busS.head=Math.atan2(-(eggB.z-eggA.z),eggB.x-eggA.x);egg.rotation.y=busS.head;toast("四姊看了一下手錶：「3、2、1——」")};
+  eggA.set(h.x+dx/L*(h.ap+6),0,h.z+dz/L*(h.ap+6));eggB.set(h.x+dx/L*(h.ap-3.4),0,h.z+dz/L*(h.ap-3.4));eggT=0;egg.visible=true;busS.mode="arrive";busS.hub=h;busS.head=Math.atan2(-(eggB.z-eggA.z),eggB.x-eggA.x);egg.rotation.y=busS.head;toast("四姐看了一下手錶：「3、2、1——」")};
 const islOfHub=h=>ISL.find(i=>ISLX[i.id].hub===h);
 function openRide(){const here=islOfHub(busS.hub);
-  open(`<div class="eyebrow">四姊叫的公車</div><h2 style="font-family:var(--f-display);font-weight:400;margin:4px 0 6px;font-size:24px">公車到站了，要去哪座島？</h2>
+  open(`<div class="eyebrow">四姐叫的公車</div><h2 style="font-family:var(--f-display);font-weight:400;margin:4px 0 6px;font-size:24px">公車到站了，要去哪座島？</h2>
    <p class="fine" style="margin-top:0">小企鵝會走過去上車，公車沿著橋把你載到目的地。</p>
    <h3 style="font-size:13px;color:var(--muted);margin:10px 0 0">六大政見</h3><div class="idx">${ISL.filter(i=>i.kind==="official"&&i!==here).map(i=>`<button data-go="${i.id}"><b>${i.n}</b><span>${i.name}島</span><span class="ok">上車</span></button>`).join("")}</div>
    <h3 style="font-size:13px;color:var(--muted);margin:12px 0 0">延伸政見</h3><div class="idx">${ISL.filter(i=>i.kind==="ext"&&i!==here).map(i=>`<button data-go="${i.id}"><b class="ext">延伸</b><span>${i.name}島</span><span class="ok">上車</span></button>`).join("")}</div>`);
@@ -1075,15 +1082,15 @@ function step(){
     if(L<.15){w.i=(w.i+1)%w.pts.length;if(Math.random()<.4)w.pause=1+Math.random()*2;return}const s=1.3*dt;w.h.position.x+=dx/L*s;w.h.position.z+=dz/L*s;let d=Math.atan2(dx,dz)-w.h.rotation.y;d=Math.atan2(Math.sin(d),Math.cos(d));w.h.rotation.y+=d*Math.min(1,dt*6);
     w.wt+=dt*7;const q=Math.sin(w.wt)*.5;u.L[0].rotation.x=q;u.L[1].rotation.x=-q;u.A[0].rotation.x=-q*.6;u.A[1].rotation.x=q*.6;u.body.position.y=Math.abs(Math.sin(w.wt))*.04;blink(u,dt)});
   const bnear=bossStep(dt,t,px,pz);
-  if(bnear){const bd=Math.hypot(boss.position.x-px,boss.position.z-pz);if(bd<nd){nd=bd;near={label:"和四姊聊聊",act:()=>openBoss()}}}
+  if(bnear){const bd=Math.hypot(boss.position.x-px,boss.position.z-pz);if(bd<nd){nd=bd;near={label:"和四姐聊聊",act:()=>openBoss()}}}
   if(!sbMode){const sd=Math.hypot(sgx-px,sgz-pz);if(sd<2.6&&sd<nd){nd=sd;near={label:"看路牌",act:openSign}}}
-  if(!st.book){book.rotation.y=t;book.position.y=.6+Math.sin(t*3)*.12;if(!sbMode&&Math.hypot(bkx-px,bkz-pz)<1.4){st.book=true;book.visible=false;progress();burst(bkx,1,bkz);toast("撿到一本「行動小六法」！去找四姊問問吧。",4200)}}
+  if(!st.book){book.rotation.y=t;book.position.y=.6+Math.sin(t*3)*.12;if(!sbMode&&Math.hypot(bkx-px,bkz-pz)<1.4){st.book=true;book.visible=false;progress();burst(bkx,1,bkz);toast("撿到一本「行動小六法」！去找四姐問問吧。",4200)}}
   st.near=near;
   const tb=$("talk");if(near&&sheet.hidden){tb.hidden=false;tb.textContent=near.label;tb.onclick=near.act}else tb.hidden=true;
   /* bus: arrive → wait → (boarding) → ride → leave */
   if(busS.mode!=="off"){const spinW=v=>eggW.forEach(w=>w.rotation.y+=dt*v);
     if(busS.mode==="arrive"){eggT+=dt/3;const kq=Math.min(1,eggT),e=1-Math.pow(1-kq,3);egg.position.lerpVectors(eggA,eggB,e);egg.position.y=heightAt(egg.position.x,egg.position.z)+Math.abs(Math.sin(t*20))*.03*(1-kq);spinW(8*(1-kq));
-      if(kq>=1){busS.mode="wait";busS.t=25;toast("叮咚，公車準點進站！四姊：「公車準點，大家才敢搭。」",3000);setTimeout(()=>{if(busS.mode==="wait")openRide()},900)}}
+      if(kq>=1){busS.mode="wait";busS.t=25;toast("叮咚，公車準點進站！四姐：「公車準點，大家才敢搭。」",3000);setTimeout(()=>{if(busS.mode==="wait")openRide()},900)}}
     else if(busS.mode==="wait"){busS.t-=dt;egg.position.y=Math.sin(t*3)*.01;if(busS.t<=0){busS.mode="leave";busS.t=0;if(!sheet.hidden&&sheet.innerHTML.includes("公車到站"))closeSheet()}}
     else if(busS.mode==="ride"){const w=busS.wp[0];const dx=w.x-egg.position.x,dz=w.z-egg.position.z,L=Math.hypot(dx,dz);
       if(L<.3){busS.wp.shift();if(!busS.wp.length){busS.mode="leave";busS.t=0;const side=busS.head+Math.PI/2;player.position.set(egg.position.x+Math.cos(side)*1.7,0,egg.position.z-Math.sin(side)*1.7);player.visible=shadowDisc.visible=true;burst(player.position.x,1.5,player.position.z);toast(`到站：${busS.dest.name}島`)}}
