@@ -480,12 +480,12 @@ function drawCert(){const gold=nItems()===6;const W=1080,H=1350,cv=document.crea
   c.strokeStyle=acc;c.lineWidth=6;c.strokeRect(40,40,W-80,H-80);c.lineWidth=2;c.strokeRect(56,56,W-112,H-112);
   c.textAlign="center";c.fillStyle=acc;c.font=`700 30px ${FB}`;c.fillText(gold?"TAOYUAN POLICY ISLAND · GOLD":"TAOYUAN POLICY ISLAND",W/2,130);
   c.fillStyle="#1d3433";c.font=`86px ${F}`;c.fillText("桃園政策島完走證",W/2,230);
-  /* penguin */const px=W/2,py=420,sc=gold?"#e3b341":(st.look.scarf==="ribbon"?"#e8735f":"#"+(st.look.shirt>>>0).toString(16).padStart(6,"0"));
+  /* penguin */const px=W/2,py=420,sc=gold?"#e3b341":(st.look.scarf==="ribbon"?"#f27fae":"#"+(st.look.shirt>>>0).toString(16).padStart(6,"0"));
   c.fillStyle="#26323a";c.beginPath();c.ellipse(px,py+40,95,110,0,0,7);c.fill();c.beginPath();c.arc(px,py-70,78,0,7);c.fill();
   c.fillStyle="#fbfaf6";c.beginPath();c.ellipse(px,py+50,62,82,0,0,7);c.fill();c.beginPath();c.ellipse(px,py-62,58,50,0,0,7);c.fill();
   c.fillStyle="#10181c";[-22,22].forEach(d=>{c.beginPath();c.arc(px+d,py-72,9,0,7);c.fill()});c.fillStyle="#f6b2a6";[-40,40].forEach(d=>{c.beginPath();c.arc(px+d,py-50,9,0,7);c.fill()});
   c.fillStyle="#f29a38";c.beginPath();c.moveTo(px-12,py-58);c.lineTo(px+12,py-58);c.lineTo(px,py-42);c.fill();
-  c.fillStyle=sc;c.beginPath();c.ellipse(px,py-12,80,20,0,0,7);c.fill();c.fillRect(px+30,py-8,26,70);if(st.look.scarf==="ribbon"&&!gold){c.fillStyle="#2aa198";c.fillRect(px+58,py-8,22,62)}
+  c.fillStyle=sc;c.beginPath();c.ellipse(px,py-12,80,20,0,0,7);c.fill();c.fillRect(px+30,py-8,26,70);if(st.look.scarf==="ribbon"&&!gold){c.fillStyle="#5bbbe6";c.fillRect(px+58,py-8,22,62);c.strokeStyle="#f06aa0";c.lineWidth=3;c.beginPath();for(let y=py-4;y<py+52;y+=2)c.lineTo(px+69+Math.sin(y*.3)*5,y);c.stroke();[[px+43,py+10],[px+43,py+40]].forEach(([x,y])=>{c.fillStyle="#5bbbe6";c.beginPath();c.arc(x,y,7,Math.PI,0);c.fill();c.fillStyle="#a6d22e";c.beginPath();c.arc(x,y,7,0,Math.PI);c.fill()})}
   if(st.look.glasses){c.strokeStyle="#2b2b2b";c.lineWidth=5;[-22,22].forEach(d=>{c.beginPath();c.arc(px+d,py-72,17,0,7);c.stroke()})}
   c.fillStyle="#1d3433";c.font=`700 54px ${FB}`;c.fillText(st.nick||"小企鵝",W/2,640);
   c.font=`30px ${FB}`;c.fillStyle="#4b5e5d";c.fillText("逛完了黃世杰的 6 大政見＋4 項延伸政見，聽完 12 位市民的故事",W/2,700);
@@ -523,7 +523,7 @@ function openChar(){
    <h2 style="font-family:var(--f-display);font-weight:400;margin:4px 0 6px;font-size:24px">小企鵝</h2>
    <p class="fine" style="margin-top:0">從機場附近海邊游上岸的小企鵝，負責帶你逛政見。找到隱藏寶物可以解鎖新造型。</p>
    <h3 class="ph3">圍巾</h3>
-   <div class="sw">${cols.map(c=>`<button data-c="${c}" aria-label="顏色 ${hex(c)}" style="background:${hex(c)}" class="${st.look.scarf==="solid"&&st.look.shirt===c?'on':''}"></button>`).join("")}${has("ribbon")?`<button data-r="1" aria-label="世杰飄帶" class="${st.look.scarf==="ribbon"?'on':''}" style="background:linear-gradient(90deg,#2aa198 50%,#e8735f 50%)"></button>`:""}</div>
+   <div class="sw">${cols.map(c=>`<button data-c="${c}" aria-label="顏色 ${hex(c)}" style="background:${hex(c)}" class="${st.look.scarf==="solid"&&st.look.shirt===c?'on':''}"></button>`).join("")}${has("ribbon")?`<button data-r="1" aria-label="世杰飄帶" class="${st.look.scarf==="ribbon"?'on':''}" style="background:linear-gradient(90deg,#5bbbe6 50%,#f27fae 50%)"></button>`:""}</div>
    <h3 class="ph3">帽子</h3>
    <div class="opt">${hats.map(h=>`<button data-h="${h[0]}" class="${st.look.hat===h[0]?'on':''}">${h[1]}</button>`).join("")}</div>
    ${has("book")?`<h3 class="ph3">配件</h3><div class="opt"><button data-g="1" class="${st.look.glasses?'on':''}">四姐同款圓框眼鏡</button></div>`:""}
@@ -889,6 +889,11 @@ function bossModel(){
   const sm=mesh(new THREE.TorusGeometry(.09,.022,6,12,Math.PI),0x8a3b2f,0,-.14,.36,u.head,false);sm.rotation.z=Math.PI;
   return g;
 }
+const RIBTEX={};function ribbonTex(k){if(RIBTEX[k])return RIBTEX[k];const cv=document.createElement("canvas");cv.width=64;cv.height=256;const c=cv.getContext("2d");
+  if(k==="wave"){c.fillStyle="#5bbbe6";c.fillRect(0,0,64,256);c.strokeStyle="#f06aa0";c.lineWidth=6;c.lineCap="round";[22,42].forEach((x0,n)=>{c.beginPath();for(let y=6;y<=226;y+=2){const x=x0+Math.sin(y*.07+n*1.6)*9;y===6?c.moveTo(x,y):c.lineTo(x,y)}c.stroke()})}
+  else{c.fillStyle="#f27fae";c.fillRect(0,0,64,256);for(let r=0;r<5;r++){const x=r%2?42:22,y=24+r*42;c.fillStyle="#5bbbe6";c.beginPath();c.arc(x,y,12,Math.PI,0);c.fill();c.fillStyle="#a6d22e";c.beginPath();c.arc(x,y,12,0,Math.PI);c.fill()}}
+  c.fillStyle="#a6d22e";c.fillRect(0,232,64,24);
+  const t=new THREE.CanvasTexture(cv);return RIBTEX[k]=new THREE.MeshStandardMaterial({map:t,roughness:.85})}
 function penguin(){
   const g=new THREE.Group();const body=new THREE.Group();g.add(body);const dark=0x26323a,L=[],A=[];
   [-.22,.22].forEach(s=>{const l=new THREE.Group();l.position.set(s,.32,0);g.add(l);rbox(.32,.1,.5,0xf29a38,0,-.3,.08,l,.04);L.push(l)});
@@ -902,8 +907,8 @@ function penguin(){
   [-.25,.25].forEach(s=>sph(.07,0xf6b2a6,s,-.11,.47,head,8));
   const bk=mesh(new THREE.ConeGeometry(.1,.26,10),0xf29a38,0,-.09,.64,head);bk.rotation.x=Math.PI/2;
   const sc=mesh(new THREE.TorusGeometry(.4,.11,8,18),st.look.shirt,0,1.45,0,body);sc.rotation.x=Math.PI/2;
-  const tailG=new THREE.Group();tailG.position.set(.22,1.4,.4);body.add(tailG);const tail=rbox(.3,.5,.12,st.look.shirt,0,-.5,0,tailG,.05);tailG.rotation.z=-.3;
-  const tail2=rbox(.26,.44,.12,0x2aa198,.12,-.46,.05,tailG,.05);tail2.rotation.z=.3;tail2.visible=false;const tip=box(.27,.08,.13,0xd7e35a,0,-.74,0,tailG);tip.visible=false;
+  const tailG=new THREE.Group();tailG.position.set(.22,1.4,.4);body.add(tailG);const tail=rbox(.3,.5,.12,st.look.shirt,0,-.5,0,tailG,.05);tailG.rotation.z=-.3;tailG.userData.t1=tail;
+  const tail2=rbox(.26,.56,.12,0x2aa198,.18,-.46,.04,tailG,.05);tail2.rotation.z=.55;tail2.visible=false;const tip=box(.27,.08,.13,0xb6e03a,0,-.78,0,tailG);tip.visible=false;
   const gl=new THREE.Group();head.add(gl);[-.13,.13].forEach(x=>{const r=mesh(new THREE.TorusGeometry(.1,.02,8,16),0x2b2b2b,x,.03,.555,gl,false)});box(.08,.02,.02,0x2b2b2b,0,.04,.56,gl);gl.visible=false;
   g.userData={L,A,body,head,eyes,hatParent:head,hatOff:.36,scarf:[sc,tail],tail2,tip,gl,tailG,blink:2};return g;
 }
@@ -1090,7 +1095,7 @@ const TRM={book(g){rbox(.6,.18,.8,0xb23b2f,0,0,0,g,.04);box(.62,.05,.82,0xf2e6c8
  umbrella(g){cyl(.02,.02,.9,0x8a6a4f,0,-.45,0,g,6);cone(.55,.28,0xd64545,0,0,0,g,14);cone(.56,.04,0xf2c94c,0,0,0,g,14)},
  buspass(g){rbox(.8,.05,.5,0xe9715d,0,0,0,g,.05);box(.2,.06,.2,0xf2c94c,-.22,0,0,g);box(.34,.06,.05,0xffffff,.15,0,.08,g)},
  drop(g){const d=sph(.3,new THREE.MeshStandardMaterial({color:0x6fc3df,transparent:true,opacity:.85,roughness:.15,emissive:0x2c8fb0,emissiveIntensity:.25}),0,0,0,g,16);d.scale.set(1,1.15,1);const t=mesh(new THREE.ConeGeometry(.22,.4,16),d.material,0,.38,0,g);sph(.07,0xffffff,-.1,.08,.26,g,8)},
- ribbon(g){const a=rbox(.18,.8,.05,0xe8735f,-.1,-.4,0,g,.03);a.rotation.z=.35;const b=rbox(.18,.8,.05,0x2aa198,.1,-.4,0,g,.03);b.rotation.z=-.35;sph(.13,0xe8735f,0,.02,0,g,10);box(.18,.08,.06,0xd7e35a,-.28,-.78,0,g);box(.18,.08,.06,0xd7e35a,.28,-.78,0,g)}};
+ ribbon(g){const a=rbox(.22,.9,.05,0xffffff,-.12,-.45,0,g,.03);a.material=ribbonTex("wave");a.rotation.z=.35;const b=rbox(.22,.9,.05,0xffffff,.12,-.45,0,g,.03);b.material=ribbonTex("dots");b.rotation.z=-.35;sph(.14,0xf27fae,0,.02,0,g,10);}};
 const TRO=TRS.map(t=>{const X=ISLX[t.isl];const [x,z]=freeSpot(X);const g=new THREE.Group();g.position.set(x,.6,z);scene.add(g);TRM[t.id](g);g.visible=!st.items[t.id];
   const glow=new THREE.Mesh(new THREE.CircleGeometry(.7,20),new THREE.MeshBasicMaterial({color:0xfff2b0,transparent:true,opacity:.45}));glow.rotation.x=-Math.PI/2;glow.position.set(x,.05,z);glow.visible=g.visible;scene.add(glow);return {t,g,glow,x,z}});
 function celebrate(){if(RM)return;let k=0;const tm=setInterval(()=>{const p=player.position;burst(p.x+(Math.random()-.5)*8,6+Math.random()*4,p.z+(Math.random()-.5)*8);if(++k>=6)clearInterval(tm)},700);
@@ -1122,7 +1127,7 @@ function openRide(){const here=islOfHub(busS.hub);
 const player=penguin();scene.add(player);
 {const X=ISLX.traffic,[x,z]=C(X,150,2.4);player.position.set(x,0,z)}
 const shadowDisc=new THREE.Mesh(new THREE.CircleGeometry(.6,20),new THREE.MeshBasicMaterial({color:0x000000,transparent:true,opacity:.18}));shadowDisc.rotation.x=-Math.PI/2;scene.add(shadowDisc);
-window.applyLook=()=>{const u=player.userData,rib=st.look.scarf==="ribbon";u.scarf[0].material=mat(rib?0xe8735f:st.look.shirt);u.scarf[1].material=mat(rib?0xe8735f:st.look.shirt);u.tail2.visible=u.tip.visible=rib;u.gl.visible=!!st.look.glasses;setHat(player,st.look.hat);try{localStorage.setItem("tyLook2",JSON.stringify(st.look))}catch(e){}};
+window.applyLook=()=>{const u=player.userData,rib=st.look.scarf==="ribbon";u.scarf[0].material=mat(rib?0xf27fae:st.look.shirt);u.scarf[1].material=rib?ribbonTex("dots"):mat(st.look.shirt);u.tail2.material=ribbonTex("wave");u.tail2.visible=rib;u.tip.visible=false;u.scarf[1].scale.y=rib?1.15:1;u.scarf[1].position.set(rib?-.08:0,rib?-.4:-.5,rib?.1:0);u.scarf[1].rotation.z=rib?-.1:0;u.gl.visible=!!st.look.glasses;setHat(player,st.look.hat);try{localStorage.setItem("tyLook2",JSON.stringify(st.look))}catch(e){}};
 applyLook();
 const meLab=label("<b>你，</b>小企鵝","me",new THREE.Vector3(),null,"me");
 let sbMode=false;
