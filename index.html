@@ -796,12 +796,12 @@ ISL.forEach(i=>{const X=ISLX[i.id];
 /* ---- people ---- */
 function human(o){
   const g=new THREE.Group();const body=new THREE.Group();g.add(body);const skin=o.skin||0xf1c9a5;const L=[],A=[];
-  [-.17,.17].forEach(s=>{const l=new THREE.Group();l.position.set(s,.75,0);g.add(l);rbox(.24,.75,.26,o.pants||0x34495e,0,-.75,0,l,.08);rbox(.26,.12,.36,0x3a3a3a,0,-.75,.04,l,.05);L.push(l)});
-  rbox(.74,.88,.44,o.shirt,0,.7,0,body,.16);
-  [-.48,.48].forEach(s=>{const a=new THREE.Group();a.position.set(s,1.5,0);body.add(a);rbox(.2,.68,.22,o.shirt,0,-.68,0,a,.08);sph(.12,skin,0,-.76,0,a,8);A.push(a)});
-  const head=new THREE.Group();head.position.y=1.95;body.add(head);
+  [-.17,.17].forEach(s=>{const l=new THREE.Group();l.position.set(s,.75,0);g.add(l);rbox(.26,.62,.28,o.pants||0x34495e,0,-.7,0,l,.12);sph(.17,0x3a3a3a,0,-.66,.06,l,10).scale.set(1,.6,1.3);L.push(l)});
+  sph(.5,o.shirt,0,1.05,0,body,16).scale.set(.84,.92,.7);
+  [-.48,.48].forEach(s=>{const a=new THREE.Group();a.position.set(s,1.5,0);body.add(a);rbox(.22,.6,.24,o.shirt,0,-.62,0,a,.11);sph(.13,skin,0,-.7,0,a,10);A.push(a)});
+  const head=new THREE.Group();head.position.y=2.05;head.scale.setScalar(1.3);body.add(head);
   sph(.4,skin,0,0,0,head,14);
-  mesh(new THREE.SphereGeometry(.42,14,8,0,Math.PI*2,0,Math.PI/2),o.grey?0xd8d8d2:(o.hair||0x2b211c),0,.07,-.03,head);
+  mesh(new THREE.SphereGeometry(.43,16,10,0,Math.PI*2,0,Math.PI*.55),o.grey?0xd8d8d2:(o.hair||0x2b211c),0,.06,-.04,head);[[-.2,.3],[.05,.36],[.25,.28]].forEach(([x,y])=>sph(.15,o.grey?0xd8d8d2:(o.hair||0x2b211c),x,y,.12,head,10));
   const eyes=[-.14,.14].map(s=>sph(.05,0x1d2a2a,s,.02,.37,head,6));
   g.userData={L,A,body,head,eyes,hatParent:head,hatOff:.37,blink:Math.random()*4};return g;
 }
@@ -927,26 +927,26 @@ rbox(58,1.6,24,0xd9d4c4,0,-6.8,0,air,.6);rbox(57,.2,23,0xe7e3d6,0,-5.4,0,air,.4)
 [-4.5,4.5].forEach(z=>{rbox(50,.1,3.4,0x5a636b,0,-5.2,z,air,.05);for(let x=-23;x<=23;x+=3)box(1.4,.11,.18,0xffffff,x,-5.2,z,air)});
 rbox(16,2.2,4.5,0xf2f3f0,0,-5.2,9.4,air,.3);rbox(16.6,.5,5.2,0x9fd4e6,0,-3.1,9.4,air,.2);sign("TPE 桃園國際機場",8,1,"#2C6E80","#fff",0,-2,12,air,{});
 cyl(.5,.7,7,0xf2f3f0,21,-5.2,9,air,10);cyl(1.3,.9,1.5,0x9fd4e6,21,1.8,9,air,10);
-function plane(p){const g=new THREE.Group();p.add(g);const W=0xf7f8f8,T=0x2c6e80,O=0xd9822b;
-  const f=mesh(new THREE.CylinderGeometry(.42,.42,5.2,16),W,0,0,0,g);f.rotation.z=Math.PI/2;
-  const nose=sph(.42,W,2.6,0,0,g,14);nose.scale.set(1.5,1,1);const ck=sph(.3,0x2b4250,3.05,.12,0,g,10);ck.scale.set(.9,.45,.8);
-  const tail=mesh(new THREE.ConeGeometry(.42,1.6,16),W,-3.4,.1,0,g);tail.rotation.z=Math.PI/2;
-  box(5,.06,.03,T,0,0,.43,g).position.y=-.02;box(5,.06,.03,T,0,-.02,-.43,g);
-  for(let x=-1.8;x<=1.8;x+=.36){sph(.05,0x2b4250,x,.16,.4,g,6);sph(.05,0x2b4250,x,.16,-.4,g,6)}
-  [1,-1].forEach(sd=>{const w=new THREE.Mesh(new THREE.BoxGeometry(1.1,.08,3),mat(0xe9edf0));w.position.set(-.1,-.15,sd*1.65);w.rotation.y=sd*.42;w.castShadow=true;g.add(w);
-    const e=mesh(new THREE.CylinderGeometry(.18,.16,.8,12),0xdfe3e6,.15,-.42,sd*1.25,g);e.rotation.z=Math.PI/2;cyl(.12,.12,.04,0x2b4250,.55,-.42,sd*1.25,g,10).rotation.z=Math.PI/2;
-    const st=new THREE.Mesh(new THREE.BoxGeometry(.6,.06,1.1),mat(0xe9edf0));st.position.set(-3.5,.2,sd*.6);st.rotation.y=sd*.35;g.add(st)});
-  const fin=new THREE.Mesh(new THREE.BoxGeometry(.9,1.1,.08),mat(T));fin.position.set(-3.55,.75,0);fin.rotation.z=-.35;fin.castShadow=true;g.add(fin);box(.5,.12,.09,O,-3.4,.86,0,g).rotation.z=-.35;
+function plane(p){const g=new THREE.Group();p.add(g);const W=0xfbfcfc,BL=0x8fd0ec,Y=0xf2b134;
+  sph(1,W,0,0,0,g,24).scale.set(3,.6,.6);
+  const tl=sph(1,W,-2.6,.25,0,g,16);tl.scale.set(.9,.38,.34);
+  const ck=sph(1,BL,2.45,.2,0,g,14);ck.scale.set(.42,.18,.4);
+  for(let k=0;k<11;k++){const x=-1.7+k*.36;[.53,-.53].forEach(z=>{const w=sph(1,BL,x,.14,z,g,8);w.scale.set(.09,.11,.04)})}
+  [.55,-.55].forEach(z=>{const st=box(4.4,.06,.02,Y,0,-.08,z,g);st.position.z=z*1.03});
+  [1,-1].forEach(sd=>{const w=rbox(1.2,.14,3.2,0xf3f5f6,-.2,-.25,sd*1.7,g,.07);w.rotation.y=sd*.45;const ws=box(.9,.03,2.6,Y,-.1,-.17,sd*1.75,g);ws.rotation.y=sd*.45;
+    const e=mesh(new THREE.CylinderGeometry(.24,.2,.85,16),0xe8ecee,.25,-.42,sd*1.3,g);e.rotation.z=Math.PI/2;const ei=cyl(.17,.17,.05,0x9aa3a8,.68,-.42,sd*1.3,g,14);ei.rotation.z=Math.PI/2;
+    const hs=rbox(.6,.08,1.3,0xf3f5f6,-2.95,.35,sd*.62,g,.04);hs.rotation.y=sd*.4});
+  const fin=rbox(1,1.2,.12,W,-2.9,.85,0,g,.1);fin.rotation.z=-.5;const fs=box(.6,.12,.13,0x2c6e80,-2.85,1,0,g);fs.rotation.z=-.5;
   return g}
 [-12,-5].forEach(x=>{const pl=plane(air);pl.position.set(x,-4.6,5.4);pl.rotation.y=-Math.PI/2});
 const tko=plane(air),lnd=plane(air);tko.rotation.y=lnd.rotation.y=Math.PI;
-ANIM.push(t=>{let T=(t%24)/24;if(T<.35){const k=T/.35;tko.position.set(24-k*k*44,-4.5,-4.5);tko.rotation.z=0}else if(T<.7){const k=(T-.35)/.35;tko.position.set(-20-k*50,-4.5+k*k*34,-4.5);tko.rotation.z=-.22}else{tko.position.set(24,-4.5,-4.5);tko.rotation.z=0}tko.visible=T<.7||T>.96;
-  T=((t+12)%24)/24;if(T<.4){const k=T/.4;lnd.position.set(80-k*58,-4.5+(1-k)*(1-k)*26,4.5);lnd.rotation.z=-.12*(1-k)}else if(T<.65){const k=(T-.4)/.25;lnd.position.set(22-(1-(1-k)*(1-k))*36,-4.5,4.5);lnd.rotation.z=0}else{lnd.position.set(-14,-4.5,4.5)}lnd.visible=T<.75});
+ANIM.push(t=>{let T=(t%24)/24;if(T<.35){const k=T/.35;tko.position.set(24-k*k*44,-4.5,-4.5);tko.rotation.z=0}else if(T<.7){const k=(T-.35)/.35;tko.position.set(-20-k*50,-4.5+k*k*34,-4.5);tko.rotation.z=.22}else{tko.position.set(24,-4.5,-4.5);tko.rotation.z=0}tko.visible=T<.7||T>.96;
+  T=((t+12)%24)/24;if(T<.4){const k=T/.4;lnd.position.set(80-k*58,-4.5+(1-k)*(1-k)*26,4.5);lnd.rotation.z=.06*(1-k)}else if(T<.65){const k=(T-.4)/.25;lnd.position.set(22-(1-(1-k)*(1-k))*36,-4.5,4.5);lnd.rotation.z=0}else{lnd.position.set(-14,-4.5,4.5)}lnd.visible=T<.75});
 label("桃園國際機場","deco",new THREE.Vector3(ax,1.5,az),null,"deco");
 /* wind turbines along the coast */
 const blades=[];function turbine(xs,ys,off=4){const z=S(xs,ys)[1],x=coastX(z)+off;const g=new THREE.Group();g.position.set(x,0,z);scene.add(g);cyl(1.1,1.3,.5,0xc9c6bc,0,-6.4,0,g,14);cyl(.18,.3,12.5,0xf4f6f6,0,-6,0,g,10);const hub=new THREE.Group();hub.position.set(0,6.7,.4);g.add(hub);sph(.35,0xf4f6f6,0,0,0,hub,10);[0,1,2].forEach(k=>{const b=mesh(RBG(.3,4.2,.1,.05),0xf4f6f6,Math.sin(k*2.094)*2.1,Math.cos(k*2.094)*2.1,0,hub);b.rotation.z=-k*2.094});blades.push(hub);return [x,z]}
 turbine(0,-300);turbine(0,-340,5.5);turbine(0,-380,4);
-const sw=[turbine(0,590),turbine(0,632,5),turbine(0,672)];label("觀音風機","deco",new THREE.Vector3(sw[1][0],9,sw[1][1]),null,"deco");
+const sw=[turbine(0,590),turbine(0,632,5),turbine(0,672)];
 ANIM.push(t=>blades.forEach((h,i)=>h.rotation.z=t*1.6+i));
 /* lighthouse */
 const lz=S(0,95)[1],lx=coastX(lz)+3.2;const lg=new THREE.Group();lg.position.set(lx,0,lz);scene.add(lg);cyl(1.8,2,.5,0xc9c6bc,0,-6.4,0,lg,16);cyl(.9,1.2,7.6,0xffffff,0,-6,0,lg,14);[-3.6,-1.4].forEach(y=>cyl(1.02,1.08,.8,0xd64545,0,y,0,lg,14));const lamp=sph(.7,0xfff2b0,0,2.2,0,lg,12);lamp.material=new THREE.MeshStandardMaterial({color:0xfff2b0,emissive:0xffe08a,emissiveIntensity:.6});cone(1.1,1,0xd64545,0,2.8,0,lg,14);
