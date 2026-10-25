@@ -914,7 +914,7 @@ const B={
   rbox(1.6,.08,1.6,0x55606a,2.4,0,1,g,.03);const dr=new THREE.Group();g.add(dr);rbox(.5,.15,.5,0x2e3a40,0,0,0,dr,.06);const props=[];[[-.35,-.35],[.35,-.35],[-.35,.35],[.35,.35]].forEach(([x,z])=>{box(.06,.06,.06,0x2e3a40,x,.05,z,dr);const p=box(.4,.02,.06,0xcfd6dc,x,.12,z,dr);props.push(p)});
   ANIM.push(t=>{dr.position.set(2.4+Math.sin(t*.7)*.8,1.6+Math.sin(t*1.8)*.3,1+Math.cos(t*.7)*.6);props.forEach(p=>p.rotation.y=t*30)})},
  orangeLine(g){for(let i=-2;i<=2;i++)cyl(.25,.3,2.6,0xc9c9c2,i*1.4,0,0,g,10);rbox(6.6,.4,1.4,0xbdbdb5,0,2.6,0,g,.08);
-  const tr=new THREE.Group();g.add(tr);rbox(2.6,1,1.1,0xf4f1ea,0,3,0,tr,.3);rbox(2.62,.3,1.12,0xe38b2c,0,3.25,0,tr,.08);rbox(2.63,.25,1.13,0x9fd4e6,0,3.6,0,tr,.08);sign("橘線延伸",1.4,.36,"#e38b2c","#fff",0,2.2,.72,g,{});
+  const tr=new THREE.Group();g.add(tr);rbox(2.6,1,1.1,0xf4f1ea,0,3,0,tr,.3);rbox(2.62,.3,1.12,0xe38b2c,0,3.25,0,tr,.08);[-.9,-.3,.3,.9].forEach(x=>[.56,-.56].forEach(z=>rbox(.42,.28,.05,0x4f7fa8,x,3.6,z,tr,.06)));[1.31,-1.31].forEach(x=>rbox(.05,.32,.8,0x4f7fa8,x,3.58,0,tr,.06));sign("橘線延伸",1.4,.36,"#e38b2c","#fff",0,2.2,.72,g,{});
   ANIM.push(t=>{tr.position.x=Math.sin(t*.45)*1.9})},
  siteOffice(g){rbox(2.4,1.3,1.6,0xe9e3d6,0,0,0,g,.12);rbox(2.5,.15,1.7,0xe38b2c,0,1.3,0,g,.05);sign("工程督導",1.6,.4,"#e38b2c","#fff",0,.85,.82,g,{});
   const hat=new THREE.Group();hat.position.set(0,2.2,0);g.add(hat);sph(.45,0xf2b134,0,0,0,hat,14).scale.set(1,.7,1);box(1.1,.05,1.1,0xf2b134,0,-.02,0,hat);ANIM.push(t=>{hat.rotation.y=t*.8;hat.position.y=2.2+Math.sin(t*2)*.08})},
