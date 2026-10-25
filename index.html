@@ -1236,13 +1236,14 @@ ANIM.push(t=>spray.forEach((d,k)=>{const T=(t*.7+k/10)%1;d.position.set(W0*.15+2
 const flatShape=(pts)=>{const s=new THREE.Shape();s.moveTo(...pts[0]);pts.slice(1).forEach(p=>s.lineTo(...p));return s};
 /* 千湖之鄉：許多小埤塘（平面水面，不挖地形） */
 {let sd=7;const rnd=()=>{sd=(sd*16807)%2147483647;return sd/2147483647};
- const pm=new THREE.MeshStandardMaterial({color:0x5fb0c2,roughness:.18});const AIRC=[10.9,-97.5];let first=true,n=0;
+ const pm=new THREE.MeshStandardMaterial({color:0x5fb0c2,roughness:.18});const AIRC=[10.9,-97.5];let first=true,n=0;const PL=[];
  const zones=[[-70,-5,62,40,26],[0,-60,42,-20,16],[-10,-30,30,40,22],[-75,15,-25,70,26],[-40,40,40,90,24],[-45,-75,0,-30,12],[45,-80,90,-20,14]];
  for(const [x0,z0,x1,z1,cnt] of zones)for(let k=0,t=0;k<cnt&&t<cnt*12;t++){const x=x0+rnd()*(x1-x0),z=z0+rnd()*(z1-z0);
    if(x<coastX(z)+5||hgt(x,z)>-6||inRiv(x,z)<3||inLake(x,z)<4)continue;
    if(HUBS.some(h=>Math.hypot(h.x-x,h.z-z)<ISR+2.5))continue;if(Object.values(LMP).some(([lx,lz])=>Math.hypot(lx-x,lz-z)<10.5))continue;
    {const dx=x-AIRC[0],dz=z-AIRC[1],a=dx*-.5+dz*.866,b=dx*.866+dz*.5;if(Math.abs(a)<34&&Math.abs(b)<17)continue}
-   const rx=1+rnd()*1.9,rz=rx*(.55+rnd()*.4),vs=6+(rnd()*4|0),pts=[];for(let v=0;v<vs;v++){const a=v/vs*Math.PI*2,r=.8+rnd()*.35;pts.push([Math.cos(a)*rx*r,Math.sin(a)*rz*r])}
+   if(x*NR.x+z*NR.y>PM-34||hgt(x+NR.x*18,z+NR.y*18)>-5.5)continue;
+   const rx=1+rnd()*1.9,rz=rx*(.55+rnd()*.4);if(PL.some(([px,pz,pr])=>Math.hypot(px-x,pz-z)<pr+rx*1.25+2.2))continue;PL.push([x,z,rx*1.25]);const vs=6+(rnd()*4|0),pts=[];for(let v=0;v<vs;v++){const a=v/vs*Math.PI*2,r=.8+rnd()*.35;pts.push([Math.cos(a)*rx*r,Math.sin(a)*rz*r])}
    const m=new THREE.Mesh(new THREE.ShapeGeometry(flatShape(pts)),pm);m.rotation.x=-Math.PI/2;m.rotation.z=rnd()*Math.PI;m.position.set(x,-6.12,z);m.receiveShadow=true;scene.add(m);
    const rim=new THREE.Mesh(new THREE.ShapeGeometry(flatShape(pts.map(([a,b])=>[a*1.18,b*1.25]))),mat(0xa9bd8c));rim.rotation.copy(m.rotation);rim.position.set(x,-6.16,z);scene.add(rim);
    window.__np=(window.__np||0)+1;if(first&&x>-10&&z<-20){label("埤塘","deco",new THREE.Vector3(x,-3.5,z),null,"deco");first=false}k++;n++}
