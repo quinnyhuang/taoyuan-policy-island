@@ -520,6 +520,7 @@ function openCV(){
   $("bb").onclick=()=>openBoss(9);
 }
 const FRIENDS={penguin:{t:"桃園政策島（桃園小企鵝）",d:"另一位支持者做的政策地圖：桃園 13 區化成小島，政見主題與細項就蓋在島上。",u:"https://taoyuan-penguin.twcrowsnest.com/"},
+ jinci:{t:"桃園幸福探索島｜黃世杰政策導覽",d:"另一位支持者做的 3D 小島：六座政策小島用長木橋串起來，還有愛情海婚船、桃小巴和小吃市集。",u:"https://www.jinci.com.tw/taoyuan/"},
  hexcity:{t:"桃園政策島｜黃世杰・心桃園 動起來",d:"另一位支持者做的 3D 六邊形小城：每格六邊形是一項政策主題，資料整理自公開報導。",u:"https://taoyuan-island.netlify.app/"}};
 function openFriend(k){const f=FRIENDS[k];open(`<div class="eyebrow" style="color:#d9645b">友站</div><h2 style="font-family:var(--f-display);font-weight:400;margin:4px 0 8px;font-size:26px;line-height:1.25">${f.t}</h2><p style="margin:0 0 14px">${f.d}</p>
   <a class="btn pri" style="display:block;text-align:center;text-decoration:none;background:#d9645b;border-color:#d9645b" href="${f.u}" target="_blank" rel="noopener">前往 ${f.u.replace(/^https:\/\//,"").replace(/\/$/,"")} ↗</a>
@@ -1268,14 +1269,15 @@ function plane(p){const g=new THREE.Group();p.add(g);const W=0xfbfcfc,BL=0x8fd0e
   const fin=rbox(1,1.2,.12,W,-2.9,.85,0,g,.1);fin.rotation.z=-.5;const fs=box(.6,.12,.13,0x2c6e80,-2.85,1,0,g);fs.rotation.z=-.5;
   return g}
 [-12,-5].forEach(x=>{const pl=plane(air);pl.position.set(x,-4.6,5.4);pl.rotation.y=-Math.PI/2});
-window.__plane=plane;const tko=plane(air),lnd=plane(air);tko.rotation.y=lnd.rotation.y=Math.PI;
-[[tko,"penguin","飛往友站・桃園小企鵝","#2f8f8a"],[lnd,"hexcity","飛往友站・六邊形小城","#d9645b"]].forEach(([pl,k,txt,colr])=>{
+window.__plane=plane;const tko=plane(air),lnd=plane(air),cru=plane(air);cru.rotation.y=Math.PI;tko.rotation.y=lnd.rotation.y=Math.PI;
+[[tko,"penguin","飛往友站・桃園小企鵝","#2f8f8a"],[lnd,"hexcity","飛往友站・六邊形小城","#d9645b"],[cru,"jinci","飛往友站・幸福探索島","#c98a1b"]].forEach(([pl,k,txt,colr])=>{
   const rope=box(2.2,.03,.03,0x8a8f94,-4.5,.1,0,pl);const bn=sign(txt,5.2,1.1,colr,"#fff",-8.3,.1,0,pl,{fs:60});bn.material.side=THREE.DoubleSide;bn.material.transparent=false;
   ANIM.push(t=>{bn.rotation.x=Math.sin(t*5+k.length)*.12;bn.position.y=.1+Math.sin(t*4)*.08});
   pick(pl,()=>openFriend(k));const lb=label("✈ "+txt,"deco friend",new THREE.Vector3(),()=>openFriend(k),"deco");
   ANIM.push(()=>{pl.getWorldPosition(lb.anchor);lb.anchor.y+=2.4;lb.show=pl.visible});});
 ANIM.push(t=>{let T=(t%24)/24;if(T<.35){const k=T/.35;tko.position.set(24-k*k*44,-4.5,-4.5);tko.rotation.z=0}else if(T<.7){const k=(T-.35)/.35;tko.position.set(-20-k*50,-4.5+k*k*34,-4.5);tko.rotation.z=.22}else{tko.position.set(24,-4.5,-4.5);tko.rotation.z=0}tko.visible=T<.7||T>.96;
   T=((t+12)%24)/24;if(T<.4){const k=T/.4;lnd.position.set(80-k*58,-4.5+(1-k)*(1-k)*26,4.5);lnd.rotation.z=.06*(1-k)}else if(T<.65){const k=(T-.4)/.25;lnd.position.set(22-(1-(1-k)*(1-k))*36,-4.5,4.5);lnd.rotation.z=0}else{lnd.position.set(-14,-4.5,4.5)}lnd.visible=T<.75});
+ANIM.push(t=>{const a=t*.09;cru.position.set(Math.cos(a)*38,16+Math.sin(t*.5)*1.2,Math.sin(a)*24);cru.rotation.y=-a-Math.PI/2;cru.rotation.x=.18});
 label("桃園國際機場","deco",new THREE.Vector3(ax,1.5,az),null,"deco");
 /* wind turbines along the coast */
 const blades=[];function turbine(xs,ys,off=4){const z=S(xs,ys)[1],x=coastX(z)+off;const g=new THREE.Group();g.position.set(x,0,z);scene.add(g);cyl(1.1,1.3,.5,0xc9c6bc,0,-6.4,0,g,14);cyl(.18,.3,12.5,0xf4f6f6,0,-6,0,g,10);const hub=new THREE.Group();hub.position.set(0,6.7,.4);g.add(hub);sph(.35,0xf4f6f6,0,0,0,hub,10);[0,1,2].forEach(k=>{const b=mesh(RBG(.3,4.2,.1,.05),0xf4f6f6,Math.sin(k*2.094)*2.1,Math.cos(k*2.094)*2.1,0,hub);b.rotation.z=-k*2.094});blades.push(hub);return [x,z]}
