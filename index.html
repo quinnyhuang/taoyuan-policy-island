@@ -55,6 +55,9 @@ button:focus-visible,a:focus-visible{outline:3px solid var(--peach);outline-offs
 .brand p{margin:6px 0 0;font-size:clamp(13px,1.6vw,16px);color:var(--ink);font-weight:700;letter-spacing:.06em}
 .brand .by{display:inline-block;margin:6px 0 0 6px;font-size:11.5px;color:var(--muted)}
 .brand .thr{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-top:8px}.brand .thr a{display:inline-flex;align-items:center;gap:6px;background:var(--ink);color:var(--paper);text-decoration:none;font-weight:700;font-size:13px;border-radius:999px;padding:5px 12px}.brand .thr a:hover{opacity:.88}.brand .thr span{font-size:12.5px;font-weight:700;color:var(--peach)}
+.brand .fold{position:absolute;top:8px;right:8px;width:30px;height:30px;border:0;border-radius:50%;background:var(--teal-soft);color:var(--ink);font-size:16px;font-weight:700;cursor:pointer;line-height:30px;padding:0}
+.brand{position:fixed}.brand h1{padding-right:28px;white-space:nowrap}.brand.min{padding:8px 46px 8px 14px;border-radius:14px}.brand.min>*:not(h1):not(.fold){display:none}.brand.min h1{font-size:20px;padding-right:0;cursor:pointer}.brand.min .fold{top:50%;transform:translateY(-50%);right:7px;width:28px;height:28px;line-height:28px}
+@media (max-width:600px){.brand h1{font-size:25px}.brand{padding:12px 14px}}
 .brand .unoff{display:inline-block;margin-top:6px;font-size:11.5px;font-weight:700;color:var(--ink);background:var(--teal-soft);border-radius:6px;padding:1px 8px}
 .tools{top:calc(12px + env(safe-area-inset-top,0px));right:max(12px,env(safe-area-inset-right,0px));display:flex;flex-direction:column;gap:8px}
 .tools button{background:var(--card);border:0;border-radius:12px;padding:8px 12px;box-shadow:var(--shadow);font-size:13.5px;font-weight:700;display:flex;align-items:center;gap:6px;justify-content:flex-start}
@@ -162,6 +165,9 @@ button:focus-visible,a:focus-visible{outline:3px solid var(--peach);outline-offs
 .idx small{color:var(--muted)}
 .idx .ok{color:var(--teal);font-weight:700;font-size:13px}
 .cv{display:flex;flex-direction:column;gap:6px}
+.cvtab{display:flex;gap:6px;margin:0 0 12px;flex-wrap:wrap}.cvtab button{border:1px solid var(--line);background:var(--paper);border-radius:999px;padding:6px 12px;font:inherit;font-size:13px;font-weight:700;cursor:pointer;color:var(--ink)}.cvtab button.on{background:var(--ink);color:var(--paper);border-color:var(--ink)}
+.cvhl{background:var(--teal-soft);border-radius:12px;padding:9px 12px;font-size:14px;font-weight:700;margin-bottom:10px}.cvhl b{color:var(--gold);font-size:20px;margin-right:4px}.cvhl span{margin:0 8px;color:var(--muted)}
+.tl{display:flex;flex-direction:column;gap:2px;border-left:3px solid var(--teal-soft);margin-left:6px}.ti{display:grid;grid-template-columns:78px 1fr;gap:8px;padding:8px 0 8px 10px}.ty{font-weight:700;font-size:12.5px;color:var(--teal);font-variant-numeric:tabular-nums}.ti b{font-size:15px}.ti em{font-style:normal;font-size:11px;font-weight:700;border-radius:6px;padding:1px 6px;margin-left:6px;vertical-align:2px}.ti em.ok{background:#e3f1e3;color:#2e7d32}.ti em.pa{background:#e3eef8;color:#2c6e9a}.ti p{margin:3px 0 0;font-size:13.5px;color:var(--muted);line-height:1.5}
 .cv div{display:grid;grid-template-columns:1fr auto;gap:8px;background:var(--paper);border-radius:10px;padding:7px 10px;font-size:14px}
 .tag{font-size:11.5px;font-weight:700;border-radius:6px;padding:1px 7px;white-space:nowrap;align-self:center}
 .tag.ok{background:var(--teal-soft);color:var(--teal)}
@@ -209,7 +215,8 @@ button:focus-visible,a:focus-visible{outline:3px solid var(--peach);outline-offs
 <div id="stage" aria-label="桃園政見島 3D 場景"></div>
 <div id="labels"></div>
 
-<div class="hud brand">
+<div class="hud brand" id="brand">
+  <button class="fold" id="fold" aria-label="收合標題" aria-expanded="true">−</button>
   <h1>桃園政策島</h1>
   <p>黃世杰．心桃園動起來</p>
   <span class="unoff">非官方 · 依公開報導與競選公開文宣整理</span>
@@ -293,6 +300,12 @@ const SRC={
  ft0728:["FTNN（Yahoo 轉載）｜毒駕重罰三讀 黃世杰：全力緊盯","https://tw.news.yahoo.com/%E6%98%94%E4%BF%83-%E5%96%AA%E5%B1%8D%E8%8F%B8%E5%BD%88-%E5%88%97-%E7%B4%9A%E6%AF%92%E5%93%81-%E4%BB%8A%E6%AF%92%E9%A7%95%E9%87%8D%E7%BD%B0%E4%B8%89%E8%AE%80-055900008.html","2026-07-28"],
  th1015:["黃世杰競選 Threads｜治安主張","https://www.threads.com/@schuanglawyer/post/DbUywMQie_g","2026-10-15"],
  l1014:["自由時報｜黃世杰提治安4大主張","https://news.ltn.com.tw/news/politics/breakingnews/5605965","2026-10-14"],
+ thcv:["黃世杰競選 Threads｜立委與法務部次長經歷文宣","https://www.threads.com/@schuanglawyer","2026-10"],
+ nt0510:["新頭殼｜新內閣再曝光 黃世杰接法務部次長","https://newtalk.tw/news/view/2024-05-10/919311","2024-05-10"],
+ ct0414:["工商時報｜綠營徵召黃世杰對戰桃園張善政","https://www.ctee.com.tw/news/20260414701597-430101","2026-04-14"],
+ mm0413:["鏡週刊｜公督盟最新評鑑公布 42人獲選優秀立委","https://www.mirrormedia.mg/story/20210413edi022","2021-04-13"],
+ cna1227:["中央社｜揭弊者保護法三讀","https://www.cna.com.tw/news/aipl/202412270281.aspx","2024-12-27"],
+ cna1217:["中央社｜立院初審詐防條例加重詐騙刑責 增訂禁奢條款","https://www.cna.com.tw/news/aipl/202512170105.aspx","2025-12-17"],
  ly:["立法院全球資訊網｜黃世杰委員（第10屆）","https://www.ly.gov.tw/Pages/List.aspx?nodeid=38607","官方資料"]
 };
 
@@ -421,7 +434,26 @@ const NPCS=[
   lines:["聽說現在電子煙會被拿來當毒品的載具，孩子在學校我真的很擔心。","黃世杰的四大主張裡有「校園守護」，要整合警政、校安和社政，避免孩子被幫派吸收。","還有「源頭斷鏈」，修菸害防制法，強化非法電子煙管制。"]}
 ];
 const CV=[
- ["建國中學畢業","ok"],["台灣大學法律學系、社會學系雙學士","ok"],["台灣大學法學碩士","ok"],["2001 年律師高考第一名","ok"],["2001 年司法官特考及格","ok"],["美國哥倫比亞大學法學碩士","ok"],["第 10 屆立法委員（桃園第 2 選區）","ok"],["桃園市政府參議、顧問","ok"]
+ ["建國中學畢業","ok"],["台灣大學法律學系、社會學系雙學士","ok"],["台灣大學法學碩士","ok"],["美國哥倫比亞大學法學碩士","ok"],["2001 年律師高考第一名","ok"],["2001 年司法官特考及格","ok"]
+];
+/* 經歷：依候選人競選文宣原文用詞（主持／參與／提出），狀態只保留可查證者 */
+const CV_LY=[
+ ["2020","18 歲成年配套法制","推動民法相關施行法修正，完善成年年齡下修至 18 歲的法律配套。","已三讀",["thcv"]],
+ ["2021","跟蹤騷擾防制法","參與立法，建立跟蹤騷擾保護機制。","已三讀",["thcv"]],
+ ["2021–2022","數位發展部相關組織法","參與審查並推動設置數位發展部。","已三讀",["thcv"]],
+ ["2022–2023","數位性暴力防制四法","主持刑法相關修法審查，強化性影像犯罪處罰、下架機制與被害人保護。","已三讀",["thcv"]],
+ ["2023","犯罪被害人權益保障法","主持修法審查，強化被害人保護、扶助與資訊服務。","已三讀",["thcv"]],
+ ["2020–2023","其他司法與制度改革","提出或參與法官法、司法人員人事條例、少年司法、公設辯護人、客語發展、電業法等多項修法。","提出／參與",["thcv"]]
+];
+const CV_MOJ=[
+ ["2024.05","就任法務部政務次長","把立法經驗帶進行政體系，協助推動法治改革與制度落地。","",["nt0510","thcv"]],
+ ["2024.07","打詐新四法","任職期間參與法務部推動打詐新四法，強化科技偵查、金流追查與被害人保護。","已三讀",["thcv"]],
+ ["2024.12","公益揭弊者保護法","以政務次長身分參與朝野協商，建立揭弊者保密、工作保障與不利處分禁止。","已三讀",["cna1227","thcv"]],
+ ["2025.05","詐欺犯罪減刑規定修法","2025 年提出修法方向，讓減刑更重視賠償被害人；文宣載明 2025 年 12 月完成三讀。","已三讀",["cna1217","thcv"]],
+ ["2025","國家安全法制強化","參與國安法修正審查與法律研議，強化面對境外勢力滲透、間諜及資訊戰的法制工具。","參與研議",["thcv"]],
+ ["2025","司法制度與人權保障","參與司法程序與人權保障相關法制研議。","參與研議",["thcv"]],
+ ["2025","公務人員考績法等相關修法","代表法務部提出法律意見，強化酒駕、毒駕及性侵害等重大違法案件的懲處規範。","已三讀",["thcv"]],
+ ["2026.04","請辭政務次長，投入桃園市長選舉","4 月 13 日辭職生效。","",["ct0414"]]
 ];
 
 /* ---------- state ---------- */
@@ -511,12 +543,17 @@ function openBoss(step=0){
     $("b4").onclick=()=>{open(`<div class="npc-head"><div><h2>四姐</h2><small>彩蛋</small></div></div><div class="bubble">我和台北市長蔣萬安是建中高二、高三的同班同學。</div><p class="fine">依黃世杰競選文宣自述。</p><div class="row"><button class="btn" id="bb">回去</button></div>`);$("bb").onclick=()=>openBoss(9)};
   }
 }
-function openCV(){
-  open(`<div class="eyebrow" style="color:var(--gold)">四姐 · 學經歷</div><h2 style="font-family:var(--f-display);font-weight:400;margin:4px 0 8px;font-size:24px">學歷看實力，經歷看治理</h2>
-   
-   <div class="cv">${CV.map(c=>`<div><span>${c[0]}</span></div>`).join("")}</div>
-   <h3 style="font-size:13px;color:var(--muted);margin:14px 0 6px">出處</h3>${srcList(["ly"])}
+function openCV(tab=0){
+  const T=[["學歷"],["立委 2020–2024"],["法務部次長 2024–2026"]];
+  const tl=L=>`<div class="tl">${L.map(([y,t,d,stt,sr])=>`<div class="ti"><span class="ty">${y}</span><div><b>${t}</b>${stt?`<em class="${stt==="已三讀"?"ok":"pa"}">${stt}</em>`:""}<p>${d}</p></div></div>`).join("")}</div>`;
+  const body=tab===0?`<div class="cv">${CV.map(c=>`<div><span>${c[0]}</span></div>`).join("")}</div><h3 class="ph3">出處</h3>${srcList(["ly","ct0414"])}`
+   :tab===1?`<div class="cvhl"><b>4 次</b>獲選公督盟優秀立委<span>·</span>司法及法制委員會召集委員</div>${tl(CV_LY)}<h3 class="ph3">出處</h3>${srcList(["thcv","mm0413","nt0510","ly"])}<p class="fine">「4 次獲選」依競選文宣；目前查到 2021 年 4 月公督盟評鑑名單有列入（鏡週刊報導）。</p>`
+   :`${tl(CV_MOJ)}<h3 class="ph3">出處</h3>${srcList([...new Set(CV_MOJ.flatMap(r=>r[4]))])}<p class="fine">詐欺犯罪減刑規定：中央社 2025-12-17 報導為立法院委員會初審，三讀時間依競選文宣。</p>`;
+  open(`<div class="eyebrow" style="color:var(--gold)">四姐 · 學經歷</div><h2 style="font-family:var(--f-display);font-weight:400;margin:4px 0 8px;font-size:24px">從立法到執行</h2>
+   <div class="cvtab">${T.map((t,k)=>`<button data-k="${k}" class="${k===tab?"on":""}">${t[0]}</button>`).join("")}</div>${body}
+   <p class="fine">依公開報導與競選公開文宣整理，用詞照文宣原文（主持／參與／提出）。</p>
    <div class="row"><button class="btn" id="bb">回去</button></div>`);
+  sheet.querySelectorAll(".cvtab button").forEach(b=>b.onclick=()=>openCV(+b.dataset.k));
   $("bb").onclick=()=>openBoss(9);
 }
 const FRIENDS={penguin:{t:"桃園政策島（桃園小企鵝）",d:"另一位支持者做的政策地圖：桃園 13 區化成小島，政見主題與細項就蓋在島上。",u:"https://taoyuan-penguin.twcrowsnest.com/"},
@@ -608,12 +645,15 @@ const INTRO=[
  ["HELLO, TAOYUAN · 01","政見不只能讀，也能逛","14 座政策島裡，5 座放著黃世杰首波的六大政見（交通島也包含科技執法），其他 9 座是延伸政見；島上標著 ①②③ 的建築和道具，就是每項政見的具體目標。17 位市民散落在島上，四姐會在各島的肥皂箱之間巡迴。"],
  ["HELLO, TAOYUAN · 02","每張政見卡都有出處","市民是虛構角色，台詞轉述自公開報導；四姐是依候選人形象設計的角色。右上角「沙盤」可以切換成俯瞰模式，拖曳、縮放整座島群。這不是候選人或政黨的官方網站。"]
 ];
+function setFold(m){$("brand").classList.toggle("min",m);$("fold").textContent=m?"＋":"−";$("fold").setAttribute("aria-expanded",!m);$("fold").setAttribute("aria-label",m?"展開標題":"收合標題")}
+function autoFold(){if(innerWidth<700)setTimeout(()=>setFold(true),2500)}
+$("fold").onclick=()=>setFold(!$("brand").classList.contains("min"));$("brand").querySelector("h1").onclick=()=>{if($("brand").classList.contains("min"))setFold(false)};
 function intro(i=0){
   const c=INTRO[i];
   $("introCard").innerHTML=`<div class="eyebrow">${c[0]}</div><h2>${c[1]}</h2><p>${c[2]}</p>${i===0?`<div class="slogan">心桃園，動起來</div>`:""}
    <div class="row" style="justify-content:space-between"><button class="btn" id="skip">略過</button><button class="btn pri" id="nxt">${i<INTRO.length-1?"下一步":"走進桃園"}</button></div>`;
-  $("skip").onclick=()=>$("intro").hidden=true;
-  $("nxt").onclick=()=>{if(i<INTRO.length-1)intro(i+1);else $("intro").hidden=true};
+  $("skip").onclick=()=>{$("intro").hidden=true;autoFold()};
+  $("nxt").onclick=()=>{if(i<INTRO.length-1)intro(i+1);else{$("intro").hidden=true;autoFold()}};
 }
 $("bIndex").onclick=openIndex;$("pPass").onclick=openPassport;$("bChar").onclick=openChar;
 $("bOverview").onclick=()=>window.setMode&&setMode(!st.overview);
