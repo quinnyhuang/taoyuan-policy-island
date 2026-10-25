@@ -577,33 +577,45 @@ function openCert(){
   open(`<div class="eyebrow" style="color:var(--gold)">完走證</div><h2 style="font-family:var(--f-display);font-weight:400;margin:4px 0 8px;font-size:26px">桃園政策島完走證</h2>
    <label for="nick" class="fine" style="display:block;margin:0 0 6px">你的暱稱（會印在完走證上）</label>
    <div class="row" style="margin-top:0"><input id="nick" maxlength="12" value="${(st.nick||"").replace(/"/g,"&quot;")}" placeholder="例如：中壢小企鵝" style="flex:1;min-width:0;border:1px solid var(--line);border-radius:12px;padding:10px 12px;font:inherit;background:var(--paper);color:var(--ink)"><button class="btn pri" id="mk">產生</button></div>
-   <div id="certOut" style="margin-top:14px"></div>`);
-  $("mk").onclick=()=>{st.nick=$("nick").value.trim();save();drawCert()};if(st.nick)drawCert()}
-function drawCert(){const gold=nItems()===6;const W=1080,H=1350,cv=document.createElement("canvas");cv.width=W;cv.height=H;const c=cv.getContext("2d");
+   <div class="cvtab" id="certFmt" style="margin-top:12px"><button data-f="story" class="${st.certFmt!=="post"?"on":""}">限時動態／手機桌布 9:16</button><button data-f="post" class="${st.certFmt==="post"?"on":""}">貼文 4:5</button></div>
+   <div id="certOut" style="margin-top:6px"></div>`);
+  $("mk").onclick=()=>{st.nick=$("nick").value.trim();save();drawCert()};
+  sheet.querySelectorAll("#certFmt button").forEach(b=>b.onclick=()=>{st.certFmt=b.dataset.f;sheet.querySelectorAll("#certFmt button").forEach(x=>x.classList.toggle("on",x===b));drawCert()});
+  if(st.nick)drawCert()}
+function certPenguin(c,px,py,s,sc,rib,gl){const E=(x,y,rx,ry,col,r=0)=>{c.fillStyle=col;c.beginPath();c.ellipse(x,y,rx,ry,r,0,7);c.fill()};const D="#26323a",W="#fbfaf6",BK="#f29a38";
+  c.save();c.translate(px,py);c.scale(s,s);
+  [-34,34].forEach(d=>E(d,140,28,12,BK));E(-100,50,20,48,D,.5);E(100,50,20,48,D,-.5);
+  E(0,50,105,100,D);E(0,-60,98,90,D);E(0,62,68,70,W);
+  E(-34,-58,44,42,W);E(34,-58,44,42,W);E(0,-30,58,36,W);
+  [-30,30].forEach(d=>{E(d,-60,12,15,"#10181c");E(d+4,-66,4.5,4.5,"#fff");E(d-3,-55,2,2,"#fff")});
+  [-56,56].forEach(d=>E(d,-30,13,9,"#f6b2a6"));
+  c.fillStyle=BK;c.beginPath();c.moveTo(-12,-40);c.quadraticCurveTo(0,-46,12,-40);c.quadraticCurveTo(0,-22,-12,-40);c.fill();
+  if(gl){c.strokeStyle="#2b2b2b";c.lineWidth=5;[-30,30].forEach(d=>{c.beginPath();c.arc(d,-60,21,0,7);c.stroke()});c.beginPath();c.moveTo(-9,-62);c.lineTo(9,-62);c.stroke()}
+  c.fillStyle=sc;c.beginPath();c.ellipse(0,6,96,21,0,0,7);c.fill();c.beginPath();c.moveTo(26,14);c.lineTo(56,14);c.lineTo(62,84);c.lineTo(32,88);c.fill();
+  if(rib){c.fillStyle="#5bbbe6";c.beginPath();c.moveTo(56,14);c.lineTo(80,14);c.lineTo(90,80);c.lineTo(64,84);c.fill();c.strokeStyle="#f06aa0";c.lineWidth=3;c.beginPath();for(let y=18;y<80;y+=2)c.lineTo(73+(y-18)*.15+Math.sin(y*.3)*4,y);c.stroke();
+    [[40,34],[44,64]].forEach(([x,y])=>{c.fillStyle="#5bbbe6";c.beginPath();c.arc(x,y,7,Math.PI,0);c.fill();c.fillStyle="#a6d22e";c.beginPath();c.arc(x,y,7,0,Math.PI);c.fill()})}
+  c.restore()}
+function drawCert(){const gold=nItems()===6,story=st.certFmt!=="post";const W=1080,H=story?1920:1350,cv=document.createElement("canvas");cv.width=W;cv.height=H;const c=cv.getContext("2d");
   const F='"Huninn","Noto Sans TC","PingFang TC","Microsoft JhengHei",sans-serif',FB='"Noto Sans TC","PingFang TC","Microsoft JhengHei",sans-serif';
+  const L=story?{tag:250,title:370,tfs:96,py:700,ps:1.32,name:1000,sub:1070,st:1180,sr:112,gold:1690,date:H-150,note:H-104}:{tag:130,title:230,tfs:86,py:420,ps:.92,name:650,sub:708,st:790,sr:98,gold:1190,date:H-96,note:H-64};
   const go=()=>{const acc=gold?"#c99a2e":"#2c6e80";
   c.fillStyle="#f4ede0";c.fillRect(0,0,W,H);c.fillStyle=acc;c.fillRect(0,0,W,18);c.fillRect(0,H-18,W,18);
   c.strokeStyle=acc;c.lineWidth=6;c.strokeRect(40,40,W-80,H-80);c.lineWidth=2;c.strokeRect(56,56,W-112,H-112);
-  c.textAlign="center";c.fillStyle=acc;c.font=`700 30px ${FB}`;c.fillText(gold?"TAOYUAN POLICY ISLAND · GOLD":"TAOYUAN POLICY ISLAND",W/2,130);
-  c.fillStyle="#1d3433";c.font=`86px ${F}`;c.fillText("桃園政策島完走證",W/2,230);
-  /* penguin */const px=W/2,py=420,sc=gold?"#e3b341":(st.look.scarf==="ribbon"?"#f27fae":"#"+(st.look.shirt>>>0).toString(16).padStart(6,"0"));
-  c.fillStyle="#26323a";c.beginPath();c.ellipse(px,py+40,95,110,0,0,7);c.fill();c.beginPath();c.arc(px,py-70,78,0,7);c.fill();
-  c.fillStyle="#fbfaf6";c.beginPath();c.ellipse(px,py+50,62,82,0,0,7);c.fill();c.beginPath();c.ellipse(px,py-62,58,50,0,0,7);c.fill();
-  c.fillStyle="#10181c";[-22,22].forEach(d=>{c.beginPath();c.arc(px+d,py-72,9,0,7);c.fill()});c.fillStyle="#f6b2a6";[-40,40].forEach(d=>{c.beginPath();c.arc(px+d,py-50,9,0,7);c.fill()});
-  c.fillStyle="#f29a38";c.beginPath();c.moveTo(px-12,py-58);c.lineTo(px+12,py-58);c.lineTo(px,py-42);c.fill();
-  c.fillStyle=sc;c.beginPath();c.ellipse(px,py-12,80,20,0,0,7);c.fill();c.fillRect(px+30,py-8,26,70);if(st.look.scarf==="ribbon"&&!gold){c.fillStyle="#5bbbe6";c.fillRect(px+58,py-8,22,62);c.strokeStyle="#f06aa0";c.lineWidth=3;c.beginPath();for(let y=py-4;y<py+52;y+=2)c.lineTo(px+69+Math.sin(y*.3)*5,y);c.stroke();[[px+43,py+10],[px+43,py+40]].forEach(([x,y])=>{c.fillStyle="#5bbbe6";c.beginPath();c.arc(x,y,7,Math.PI,0);c.fill();c.fillStyle="#a6d22e";c.beginPath();c.arc(x,y,7,0,Math.PI);c.fill()})}
-  if(st.look.glasses){c.strokeStyle="#2b2b2b";c.lineWidth=5;[-22,22].forEach(d=>{c.beginPath();c.arc(px+d,py-72,17,0,7);c.stroke()})}
-  c.fillStyle="#1d3433";c.font=`700 54px ${FB}`;c.fillText(st.nick||"小企鵝",W/2,640);
-  c.font=`30px ${FB}`;c.fillStyle="#4b5e5d";c.fillText(`逛完了 ${ISL.length} 座政策島，聽完 ${NPCS.length} 位市民的故事`,W/2,700);
-  /* stamps */const all=[...ISL.map(i=>i.name),...NPCS.map(p=>p.name)];const cols=8,cw=118,x0=W/2-cw*(cols-1)/2;
-  all.forEach((n,k)=>{const r=Math.floor(k/cols),cc=k%cols,x=x0+cc*cw,y=780+r*98;c.save();c.translate(x,y);c.rotate(((k*37)%11-5)*.03);
+  c.textAlign="center";c.fillStyle=acc;c.font=`700 30px ${FB}`;c.fillText(gold?"TAOYUAN POLICY ISLAND · GOLD":"TAOYUAN POLICY ISLAND",W/2,L.tag);
+  c.fillStyle="#1d3433";c.font=`${L.tfs}px ${F}`;c.fillText("桃園政策島完走證",W/2,L.title);
+  const rib=st.look.scarf==="ribbon"&&!gold,sc=gold?"#e3b341":(rib?"#f27fae":"#"+(st.look.shirt>>>0).toString(16).padStart(6,"0"));
+  certPenguin(c,W/2,L.py,L.ps,sc,rib,st.look.glasses);
+  c.fillStyle="#1d3433";c.font=`700 ${story?62:54}px ${FB}`;c.fillText(st.nick||"小企鵝",W/2,L.name);
+  c.font=`${story?32:30}px ${FB}`;c.fillStyle="#4b5e5d";c.fillText(`逛完了 ${ISL.length} 座政策島，聽完 ${NPCS.length} 位市民的故事`,W/2,L.sub);
+  const all=[...ISL.map(i=>i.name),...NPCS.map(p=>p.name)];const cols=8,cw=118,x0=W/2-cw*(cols-1)/2;
+  all.forEach((n,k)=>{const r=Math.floor(k/cols),cc=k%cols,x=x0+cc*cw,y=L.st+r*L.sr;c.save();c.translate(x,y);c.rotate(((k*37)%11-5)*.03);
     c.strokeStyle=k<ISL.length?"#d9822b":"#2c6e80";c.lineWidth=4;c.beginPath();c.arc(0,0,44,0,7);c.stroke();c.lineWidth=2;c.beginPath();c.arc(0,0,38,0,7);c.stroke();
     c.fillStyle=c.strokeStyle;c.font=`700 ${n.length>4?15:n.length>3?18:22}px ${FB}`;c.fillText(n,0,8);c.restore()});
-  if(gold){c.fillStyle="#c99a2e";c.font=`700 34px ${FB}`;c.fillText("★ 尋寶達人：6 件隱藏寶物全數找到 ★",W/2,1190)}
-  c.fillStyle="#6b7c7b";c.font=`26px ${FB}`;const d=new Date();c.fillText(`${d.getFullYear()}.${d.getMonth()+1}.${d.getDate()}`,W/2,H-96);
-  c.font=`22px ${FB}`;c.fillText("非官方網站・依公開報導與競選公開文宣整理",W/2,H-64);
+  if(gold){c.fillStyle="#c99a2e";c.font=`700 34px ${FB}`;c.fillText("★ 尋寶達人：6 件隱藏寶物全數找到 ★",W/2,L.gold)}
+  c.fillStyle="#6b7c7b";c.font=`26px ${FB}`;const d=new Date();c.fillText(`${d.getFullYear()}.${d.getMonth()+1}.${d.getDate()}`,W/2,L.date);
+  c.font=`22px ${FB}`;c.fillText("非官方網站・依公開報導與競選公開文宣整理",W/2,L.note);
   cv.toBlob(b=>{const url=URL.createObjectURL(b);const out=$("certOut");if(!out)return;
-    out.innerHTML=`<img src="${url}" alt="桃園政策島完走證" style="width:100%;border-radius:12px;box-shadow:var(--shadow)"><p class="fine">手機請長按圖片存檔；電腦可以按「下載」。</p><div class="row"><button class="btn pri" id="shr">分享</button><a class="btn" id="dl" href="${url}" download="桃園政策島完走證.png" style="text-decoration:none">下載</a></div>`;
+    out.innerHTML=`<img src="${url}" alt="桃園政策島完走證" style="width:100%;max-width:${story?"340px":"100%"};display:block;margin:0 auto;border-radius:12px;box-shadow:var(--shadow)"><p class="fine">手機請長按圖片存檔；電腦可以按「下載」。</p><div class="row"><button class="btn pri" id="shr">分享</button><a class="btn" id="dl" href="${url}" download="桃園政策島完走證.png" style="text-decoration:none">下載</a></div>`;
     const f=new File([b],"桃園政策島完走證.png",{type:"image/png"});
     $("shr").onclick=async()=>{try{if(navigator.canShare&&navigator.canShare({files:[f]}))await navigator.share({files:[f],title:"桃園政策島完走證",text:"我逛完桃園政策島了！"});else{toast("這個瀏覽器不支援直接分享，請長按圖片存檔或按下載。")}}catch(e){}}},"image/png")};
   (document.fonts&&document.fonts.ready?document.fonts.ready:Promise.resolve()).then(go)}
