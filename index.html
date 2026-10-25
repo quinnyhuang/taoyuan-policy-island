@@ -183,7 +183,7 @@ button:focus-visible,a:focus-visible{outline:3px solid var(--peach);outline-offs
 .intro h2{font-family:var(--f-display);font-weight:400;font-size:28px;margin:6px 0 8px;line-height:1.2}
 .intro p{margin:0 0 6px;color:var(--muted)}
 .intro .slogan{font-family:var(--f-display);font-size:18px;color:var(--teal);margin:8px 0}
-#nogl{position:fixed;inset:0;display:grid;place-items:center;text-align:center;padding:24px}
+#nogl{position:fixed;inset:0;display:grid;place-items:center;text-align:center;padding:24px}#nogl>div{max-width:440px}@media (min-width:1000px){#nogl{right:min(380px,30vw)}}
 
 @media (min-width:1000px){
  body{font-size:17px}
@@ -669,11 +669,16 @@ progress();intro();renderIdx();
 
 /* ---------- 3D ---------- */
 let renderer=null;
-try{if(typeof THREE!=="undefined")renderer=new THREE.WebGLRenderer({antialias:true})}catch(e){renderer=null}
 window.travelNpc=p=>openTalk(p);window.travelIsl=i=>openCard(i);
-if(!renderer){
-  $("stage").innerHTML=`<div id="nogl"><div><h2 style="font-family:var(--f-display);font-weight:400">這台裝置無法顯示 3D 場景</h2><p>可以改用「政見索引」閱讀所有政見卡。</p></div></div>`;
-}else{(function(){
+function noGL(why){$("stage").innerHTML=`<div id="nogl"><div><h2 style="font-family:var(--f-display);font-weight:400">3D 場景暫時無法顯示</h2><p>${why}</p><p><button class="btn pri" onclick="location.reload()">重新整理</button></p><p class="fine">如果一直出現：關掉其他開著這個網站的分頁再試；電腦版請確認瀏覽器設定裡的「硬體加速」有開啟。也可以先用右邊的「政見索引」閱讀所有政見卡。</p></div></div>`}
+const THREE_CDN=["https://cdn.jsdelivr.net/npm/three@0.128.0/build/three.min.js","https://unpkg.com/three@0.128.0/build/three.min.js"];
+function ensureThree(k=0){if(typeof THREE!=="undefined")return init3D();if(k>=THREE_CDN.length)return noGL("3D 元件下載失敗，可能是網路不穩。");const sc=document.createElement("script");sc.src=THREE_CDN[k];sc.onload=()=>ensureThree(k+1);sc.onerror=()=>ensureThree(k+1);document.head.appendChild(sc)}
+function init3D(tries=0){try{renderer=new THREE.WebGLRenderer({antialias:true,powerPreference:"default",failIfMajorPerformanceCaveat:false})}catch(e){renderer=null}
+  if(!renderer){if(tries<2)return setTimeout(()=>init3D(tries+1),800);return noGL("瀏覽器目前沒有提供 WebGL（3D 繪圖功能）。")}
+  renderer.domElement.addEventListener("webglcontextlost",e=>{e.preventDefault();noGL("顯示卡暫時中斷了 3D 繪圖，重新整理就會恢復。")});
+  run3D()}
+ensureThree();
+function run3D(){(function(){
 const RM=matchMedia("(prefers-reduced-motion: reduce)").matches;
 const stage=$("stage");
 renderer.setPixelRatio(Math.min(2,devicePixelRatio||1));
