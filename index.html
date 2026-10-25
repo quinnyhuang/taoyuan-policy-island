@@ -1192,6 +1192,7 @@ const creek=(c,len,w)=>{for(let k=-6;k<=len;k+=1)RIV.push([c[0]+.866*k,c[1]+.5*k
 const inRiv=(x,z)=>{let m=1e9;for(const [px,pz,w] of RIV){const d=Math.hypot(x-px,z-pz)-w;if(d<m)m=d}return m};
 /* ponds of different sizes */
 const PONDS=[[630,185,6.5,4,.4,1],[800,250,4.2,3.6,1.1,2],[960,240,7.5,4.5,-.4,3],[1060,305,3.6,3,0,4],[720,185,4.8,3.2,-1,5],[905,165,5.6,3.4,.8,6]].map(([xs,ys,rx,rz,rot,sd])=>{const [x,z]=S(xs,ys);return {x,z,rx,rz,rot,sd}});
+[[-32,59,5.5,3.6,.5,7],[-47.4,44.9,3.8,3.2,-.6,8],[-61.3,36.6,4.6,3,1.2,9],[-60.3,54.8,6.2,3.8,-.2,10]].forEach(([x,z,rx,rz,rot,sd])=>PONDS.push({x,z,rx,rz,rot,sd}));
 const pr=(p,a)=>1+Math.sin(a*2+p.sd)*.13+Math.sin(a*3+p.sd*2.3)*.07;
 function inPond(x,z){let best=9;for(const p of PONDS){const dx=x-p.x,dz=z-p.z,c=Math.cos(p.rot),s=Math.sin(p.rot);const lx=dx*c-dz*s,lz=dx*s+dz*c;const a=Math.atan2(lz/p.rz,lx/p.rx);const rr=Math.hypot(lx/p.rx,lz/p.rz)/pr(p,a);if(rr<best)best=rr}return best}
 function hgt(x,z){const d=x-coastX(z);if(d<0)return Math.max(-14,-6.6+d*.9);
@@ -1284,11 +1285,14 @@ const lmLabel=(t,x,y,z)=>label(t,"deco",new THREE.Vector3(x,y,z),null,"deco");
 const flatShape=(pts)=>{const s=new THREE.Shape();s.moveTo(...pts[0]);pts.slice(1).forEach(p=>s.lineTo(...p));return s};
 const blob=(rx,rz,k=48,w1=.5,w2=.3)=>{const pts=[];for(let i=0;i<k;i++){const a=i/k*Math.PI*2;pts.push([Math.cos(a)*(rx+Math.cos(a*2)*w1),Math.sin(a)*(rz+Math.sin(a*3)*w2)])}return flatShape(pts)};
 const waterMat=new THREE.MeshStandardMaterial({color:0x6cb8c9,roughness:.15});
+let PADT=null;const softPad=(p,rx,rz,c=0xadbf92,y=.02)=>{if(!PADT){const cv=document.createElement('canvas');cv.width=cv.height=128;const x=cv.getContext('2d');const gr=x.createRadialGradient(64,64,0,64,64,64);gr.addColorStop(0,'rgba(255,255,255,1)');gr.addColorStop(.62,'rgba(255,255,255,1)');gr.addColorStop(1,'rgba(255,255,255,0)');x.fillStyle=gr;x.fillRect(0,0,128,128);PADT=new THREE.CanvasTexture(cv)}
+  const m=new THREE.Mesh(new THREE.PlaneGeometry(rx*2,rz*2),new THREE.MeshLambertMaterial({color:c,alphaMap:PADT,transparent:true,depthWrite:false}));m.rotation.x=-Math.PI/2;m.position.y=y;m.receiveShadow=true;p.add(m);
+  for(let i=0;i<14;i++){const a=i/14*Math.PI*2+.2,k=.78+((i*37)%7)/40;const b=sph(.35+((i*13)%5)/12,0x86b167,Math.cos(a)*rx*k,.2,Math.sin(a)*rz*k,p,7);b.scale.y=.7}return m};
 const flatMesh=(shape,m,x,y,z,p)=>{const o=new THREE.Mesh(new THREE.ShapeGeometry(shape),m);o.rotation.x=-Math.PI/2;o.position.set(x,y,z);o.receiveShadow=true;p.add(o);return o};
 
 /* 橫山書法藝術公園 */
 {const g=LMG(LMP.callig[0],LMP.callig[1],-6.2);g.scale.setScalar(.65);
- const lawn=new THREE.Mesh(new THREE.ExtrudeGeometry(flatShape([[-9,-5.5],[8.5,-6],[10,-4.5],[10,5.5],[8.5,7],[-7,7],[-10,3],[-10,-4]]),{depth:.25,bevelEnabled:false}),mat(0xb9cf8f));lawn.rotation.x=Math.PI/2;lawn.position.y=.25;lawn.receiveShadow=true;g.add(lawn);
+ softPad(g,12.5,9,0xadbf92,.05);
  const loop=mesh(new THREE.TorusGeometry(1,.06,4,48),0xe8e0cc,-.6,.28,.4,g);loop.rotation.x=Math.PI/2;loop.scale.set(8.2,5.4,1);
  const lk=flatMesh(blob(7.2,4.3),waterMat,-.8,.3,-.2,g);lk.rotation.z=-.06;
  const mu=new THREE.Group();mu.position.set(5.6,.25,4.6);mu.rotation.y=-.12;g.add(mu);box(6.4,.75,1.7,0xeeeae0,0,0,0,mu);box(6.42,.06,1.72,0xd9d4c7,0,.75,0,mu);
@@ -1300,29 +1304,34 @@ const flatMesh=(shape,m,x,y,z,p)=>{const o=new THREE.Mesh(new THREE.ShapeGeometr
  for(let i=0;i<34;i++){const a=i/34*Math.PI*2;const x=-.8+Math.cos(a)*8.9,z=.2+Math.sin(a)*5.9;if(x>2.5&&z>2.6)continue;if(Math.abs(x+.8)<1.8&&z>3.4)continue;ptree(g,x,z,.55+(i%3)*.08,i%2?0x6ea851:0x7fb85f)}
  lmLabel("橫山書法藝術公園",LMP.callig[0],-1,LMP.callig[1])}
 
-/* 龍潭大池 */
-{const g=LMG(LMP.longtan[0],LMP.longtan[1],-6.2,.15);
- flatMesh(blob(7.5,5,48,.4,.4),mat(0xb9cf8f),0,.02,0,g);flatMesh(blob(6.6,4.2,48,.4,.3),waterMat,0,.06,0,g);
- // 南天宮 on an islet
- const T=new THREE.Group();T.position.set(-2.2,0,.6);g.add(T);cyl(1.6,1.7,.3,0xe6e0d0,0,0,0,T,16);
+/* 龍潭大池：南天宮在湖心，觀光大橋往東、九曲橋往南、另一座橋往西北岸 */
+{const g=LMG(LMP.longtan[0],LMP.longtan[1],-6.2,0);
+ softPad(g,9.4,7);flatMesh(blob(7.4,5,48,.4,.35),waterMat,0,.06,0,g);
+ const T=new THREE.Group();g.add(T);cyl(1.7,1.8,.3,0xe6e0d0,0,0,0,T,18);
  const wall=nightMat(0xb8432f,0xffb14a),roofM=nightMat(0xd9773a,0xffc061);
- const hall=box(1.6,.9,1.1,wall,0,.3,0,T);const r1=mesh(new THREE.ConeGeometry(1.35,.55,4),roofM,0,1.45,0,T);r1.rotation.y=Math.PI/4;r1.scale.set(1.15,1,.85);
+ box(1.6,.9,1.1,wall,0,.3,0,T);const r1=mesh(new THREE.ConeGeometry(1.35,.55,4),roofM,0,1.45,0,T);r1.rotation.y=Math.PI/4;r1.scale.set(1.15,1,.85);
  box(1.1,.45,.8,wall,0,1.55,0,T);const r2=mesh(new THREE.ConeGeometry(.95,.45,4),roofM,0,2.2,0,T);r2.rotation.y=Math.PI/4;r2.scale.set(1.15,1,.85);
- [-1.25,1.25].forEach(x=>{for(let k=0;k<3;k++){cyl(.22-k*.04,.24-k*.04,.35,wall,x,.3+k*.5,.2,T,6);const rr=mesh(new THREE.ConeGeometry(.36-k*.05,.2,6),roofM,x,.75+k*.5,.2,T)}});
- // white suspension bridge
- const SB=new THREE.Group();SB.position.set(2,0,-.6);SB.rotation.y=-.5;g.add(SB);const W=0xf4f4f0;
- [-3.6,3.6].forEach(x=>{[-.35,.35].forEach(z=>{const t=box(.18,2.6,.18,W,x,0,z,SB);t.rotation.x=z<0?.08:-.08})});box(7.6,.12,.6,W,0,.55,0,SB);
- [-.32,.32].forEach(z=>{const P=[];for(let i=0;i<=12;i++){const x=-3.6+i*.6;P.push(new THREE.Vector3(x,.75+Math.pow(x/3.6,2)*1.8,z))}const tu=new THREE.Mesh(new THREE.TubeGeometry(new THREE.CatmullRomCurve3(P),24,.025,4),mat(0x5a6670));SB.add(tu)});
- // zigzag bridge (white with blue rails)
- const ZZ=[[-6.2,2.8],[-4.6,2.2],[-3.6,3.2],[-2,2.6],[-1,3.6],[.8,3]];for(let i=0;i<ZZ.length-1;i++){const [ax,az]=ZZ[i],[bx,bz]=ZZ[i+1];const L=Math.hypot(bx-ax,bz-az);const s=box(L,.18,.45,0xf2efe8,(ax+bx)/2,.1,(az+bz)/2,g);s.rotation.y=-Math.atan2(bz-az,bx-ax);
-   [-.22,.22].forEach(o=>{const r=box(L,.1,.04,0x3f8fd2,(ax+bx)/2-Math.sin(Math.atan2(bz-az,bx-ax))*o,.32,(az+bz)/2+Math.cos(Math.atan2(bz-az,bx-ax))*o,g);r.rotation.y=s.rotation.y})}
+ [-1.2,1.2].forEach(z=>{for(let k=0;k<3;k++){cyl(.22-k*.04,.24-k*.04,.35,wall,-.6,.3+k*.5,z,T,6);mesh(new THREE.ConeGeometry(.36-k*.05,.2,6),roofM,-.6,.75+k*.5,z,T)}});
+ const W=0xf4f4f0;
+ // 觀光大橋（白色吊橋）：湖心往東（+x）接岸
+ const SB=new THREE.Group();SB.position.set(1.7,0,0);g.add(SB);const L=7;
+ [[.3,1],[L-.2,1]].forEach(([x])=>[-.38,.38].forEach(z=>{const t=box(.2,2.6,.2,W,x,0,z,SB);t.rotation.x=z<0?.07:-.07}));
+ box(L,.12,.6,W,L/2,.5,0,SB);[-.3,.3].forEach(z=>box(L,.12,.03,0xdfe3e6,L/2,.75,z,SB));
+ [-.36,.36].forEach(z=>{const P=[];for(let i=0;i<=14;i++){const x=.3+i*(L-.5)/14,u=(x-.3)/(L-.5)*2-1;P.push(new THREE.Vector3(x,.85+u*u*1.6,z))}SB.add(new THREE.Mesh(new THREE.TubeGeometry(new THREE.CatmullRomCurve3(P),28,.03,4),mat(0x5a6670)))});
+ // 九曲橋：湖心往南（+z）接岸，白色橋面＋藍色欄杆
+ const ZZ=[[.2,1.7],[1,2.5],[-.2,3.3],[.6,4.1],[-.5,4.9],[-.3,5.8]];
+ for(let i=0;i<ZZ.length-1;i++){const [ax,az]=ZZ[i],[bx,bz]=ZZ[i+1];const Lz=Math.hypot(bx-ax,bz-az),an=Math.atan2(bz-az,bx-ax);const sg=box(Lz+.3,.16,.5,0xf2efe8,(ax+bx)/2,.12,(az+bz)/2,g);sg.rotation.y=-an;
+   [-.24,.24].forEach(o=>{const r=box(Lz+.2,.1,.05,0x3f8fd2,(ax+bx)/2-Math.sin(an)*o,.34,(az+bz)/2+Math.cos(an)*o,g);r.rotation.y=-an})}
+ // 西北岸的橋（-x,-z）
+ {const ax=-1.3,az=-1.2,bx=-5.6,bz=-4,Lw=Math.hypot(bx-ax,bz-az),an=Math.atan2(bz-az,bx-ax);const bb=box(Lw,.18,.7,0xeeeae0,(ax+bx)/2,.12,(az+bz)/2,g);bb.rotation.y=-an;
+   [-.33,.33].forEach(o=>{const r=box(Lw,.16,.06,0xd8d4ca,(ax+bx)/2-Math.sin(an)*o,.36,(az+bz)/2+Math.cos(an)*o,g);r.rotation.y=-an})}
  const swans=[0,1,2].map(i=>{const b=new THREE.Group();g.add(b);sph(.22,0xffffff,0,.15,0,b,8).scale.set(1.3,.6,1);cyl(.04,.05,.35,0xffffff,.2,.15,0,b,6);sph(.06,0xf29a38,.24,.5,0,b,6);return b});
- ANIM.push(t=>swans.forEach((b,i)=>{const a=t*.15+i*2.1;b.position.set(2.5+Math.cos(a)*2.2,.05,1.2+Math.sin(a)*1.4);b.rotation.y=-a}));
- for(let i=0;i<16;i++){const a=i/16*Math.PI*2;ptree(g,Math.cos(a)*7.6,Math.sin(a)*5.4,.5,0x6ea851)}
+ ANIM.push(t=>swans.forEach((b,i)=>{const a=t*.15+i*2.1;b.position.set(-3+Math.cos(a)*1.8,.05,2.2+Math.sin(a)*1.2);b.rotation.y=-a}));
+ for(let i=0;i<14;i++){const a=i/14*Math.PI*2+.1;if(Math.abs(Math.sin(a))<.2||Math.cos(a)<-.6&&Math.sin(a)<-.4)continue;ptree(g,Math.cos(a)*8.2,Math.sin(a)*5.8,.5,0x6ea851)}
  lmLabel("龍潭大池",LMP.longtan[0],-1.2,LMP.longtan[1])}
 
 /* 六福村 */
-{const g=LMG(LMP.leofoo[0],LMP.leofoo[1],-6.2);flatMesh(blob(6,4.5,32,.3,.3),mat(0xc9d6a0),0,.02,0,g);
+{const g=LMG(LMP.leofoo[0],LMP.leofoo[1],-6.2);softPad(g,7.5,6);
  const FW=new THREE.Group();FW.position.set(-2,3.4,0);g.add(FW);[-.5,.5].forEach(z=>{const a=box(.15,3.5,.15,0xd8d8d2,-1,-3.4,z,g);a.position.x=-2.9;a.rotation.z=-.3;const b=box(.15,3.5,.15,0xd8d8d2,-1.1,-3.4,z,g);b.rotation.z=.3});
  const wh=new THREE.Group();FW.add(wh);const rim=mesh(new THREE.TorusGeometry(2.4,.07,6,32),0xe9715d,0,0,0,wh);for(let k=0;k<8;k++){const sp=box(.05,4.8,.05,0xf2f2ec,0,-2.4,0,wh);sp.rotation.z=k*Math.PI/8}
  const cabs=[];for(let k=0;k<10;k++){const c=rbox(.4,.4,.4,[0xf2c94c,0x3f8fd2,0x7b5cd6,0x2aa198,0xe1678f][k%5],0,0,0,FW,.08);cabs.push(c)}
@@ -1335,7 +1344,7 @@ const flatMesh=(shape,m,x,y,z,p)=>{const o=new THREE.Mesh(new THREE.ShapeGeometr
  lmLabel("六福村",LMP.leofoo[0],1.5,LMP.leofoo[1])}
 
 /* 埔心牧場 */
-{const g=LMG(LMP.puxin[0],LMP.puxin[1],-6.2);flatMesh(blob(5.6,4.2,32,.3,.3),mat(0xb3cf86),0,.02,0,g);
+{const g=LMG(LMP.puxin[0],LMP.puxin[1],-6.2);softPad(g,7,5.4);
  for(let i=0;i<28;i++){const a=i/28*Math.PI*2;box(.08,.5,.08,0xfbf7ee,Math.cos(a)*5.2,0,Math.sin(a)*3.9,g)}
  const wm=new THREE.Group();wm.position.set(-2.4,0,-1.2);g.add(wm);cyl(.6,1.05,2.6,0xe9c45a,0,0,0,wm,8);[0,1,2,3].forEach(k=>{const s=box(.05,2.6,.06,0xffffff,Math.sin(k*1.57)*.82,0,Math.cos(k*1.57)*.82,wm);s.rotation.set(Math.cos(k*1.57)*-.17,0,Math.sin(k*1.57)*.17)});
  cone(.75,.7,0x5a3b2a,0,2.6,0,wm,8);const bl=new THREE.Group();bl.position.set(0,2.75,.75);wm.add(bl);[0,1,2,3].forEach(k=>{const b=new THREE.Group();b.rotation.z=k*Math.PI/2;bl.add(b);box(.08,1.6,.04,0xf2f2ec,0,0,0,b);const sl=box(.32,1.2,.02,0xdfe7ea,.18,.35,0,b);sl.material=new THREE.MeshStandardMaterial({color:0xdfe7ea,transparent:true,opacity:.6})});
