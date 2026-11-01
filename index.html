@@ -261,6 +261,10 @@ button:focus-visible,a:focus-visible{outline:3px solid var(--peach);outline-offs
 <script src="friend-links.js"></script>
 <script src="stamp-book.js"></script>
 <script src="dialogue.js"></script>
+<script src="confetti3d.js"></script>
+<script src="wander.js"></script>
+<script src="patrol.js"></script>
+<script src="pickups3d.js"></script>
 <script>
 const SRC={
  c0727:["中央社｜黃世杰公布首波政見 六大面向","https://www.cna.com.tw/news/aloc/202607270113.aspx","2026-07-27"],
@@ -1231,14 +1235,13 @@ NPCS.forEach((p,k)=>{const X=ISLX[p.isl];const [x,z]=C(X,SL.npc[p.slot][0],SL.np
   pick(n,()=>sbMode?openTalk(p):travelNpc(p));
   const lb=label(p.name,"npc"+(st.done[p.id]?" done":""),new THREE.Vector3(x,3.9,z),()=>sbMode?openTalk(p):travelNpc(p),"npc");
   npcObjs.push({p,obj:n,mk,bang,lb,ph:k*.7,hub:X.hub,tgt:null,pause:0,wt:0})});
-function npcTarget(n){const h=n.hub;for(let k=0;k<14;k++){const a=Math.random()*Math.PI*2,r=1.5+Math.random()*(h.ap-3.6),x=h.x+Math.cos(a)*r,z=h.z+Math.sin(a)*r;if(!inHex(h,x,z,1.6))continue;let ok=true;const ox=n.obj.position.x,oz=n.obj.position.z;for(let q=1;q<=8&&ok;q++){const sx=ox+(x-ox)*q/8,sz=oz+(z-oz)*q/8;if(COL.some(c=>Math.hypot(c[0]-sx,c[1]-sz)<c[2]+.55))ok=false}if(ok)return{x,z}}return null}
+function npcTarget(n){const h=n.hub;return Wander.pickTarget({cx:h.x,cz:h.z,rMin:1.5,rRange:h.ap-3.6,tries:14,samples:8,inside:(x,z)=>inHex(h,x,z,1.6),from:n.obj.position,blocked:(sx,sz)=>COL.some(c=>Math.hypot(c[0]-sx,c[1]-sz)<c[2]+.55)})}
 /* ambient passers-by */
 const WALK=[];
 
 /* confetti */
-const CONF=[];const cg=new THREE.CylinderGeometry(.14,.14,.04,6);
-for(let i=0;i<36;i++){const m=new THREE.Mesh(cg,mat([0xe9715d,0x1f7a74,0xe3aa45,0x7b5cd6][i%4]));m.visible=false;scene.add(m);CONF.push({m,v:new THREE.Vector3(),life:0,spin:new THREE.Vector3()})}
-function burst(x,y,z){if(RM)return;CONF.forEach(c=>{c.m.visible=true;c.m.position.set(x,y,z);const a=Math.random()*Math.PI*2,s=2+Math.random()*3;c.v.set(Math.cos(a)*s,4+Math.random()*4,Math.sin(a)*s);c.life=1.6;c.spin.set(Math.random()*8,Math.random()*8,Math.random()*8)})}
+const CONFETTI=Confetti3D.create({THREE,scene,material:mat,count:36,colors:[0xe9715d,0x1f7a74,0xe3aa45,0x7b5cd6],reduced:RM}),CONF=CONFETTI.pieces;
+function burst(x,y,z){CONFETTI.burst(x,y,z)}
 window.markDone=p=>{const o=npcObjs.find(o=>o.p===p);if(o){o.bang.material=mat(0x1f7a74);o.lb.el.classList.add("done");burst(o.obj.position.x,2.5,o.obj.position.z)}};
 
 /* ---- surroundings per sketch: sea west of the coastline, plain with ponds & airport to the north, hills and Shimen Reservoir to the south-east ---- */
@@ -1513,22 +1516,24 @@ const bs={i:0,mode:"speak",t:6,wp:null,hop:0,from:null,line:0,wt:0};
 {const S0=SOAP[TOUR[0]];boss.position.set(S0.x,.62,S0.z)}
 pick(boss,()=>sbMode?openBoss():travelPt(boss.position.x+1.6,boss.position.z+1.6,()=>openBoss()));
 function bossGo(){bs.i=(bs.i+1)%TOUR.length;const S=SOAP[TOUR[bs.i]];const a=Math.atan2(S.hz-S.z,S.hx-S.x);bs.wp=route(boss.position.x,boss.position.z,S.x+Math.cos(a)*1.5,S.z+Math.sin(a)*1.5);bs.mode="down";bs.hop=0;bs.from={x:boss.position.x,z:boss.position.z}}
+const BOSS_SM=Patrol.machine(bs,{
+  speak:c=>{const {dt,t,px,pz,near,talking,ud}=c;boss.position.y=.62;if(!talking&&!near)bs.t-=dt;else bs.t=Math.max(bs.t,3);
+    ud.A[0].rotation.x=-2.3+Math.sin(t*3.2)*.35;ud.A[1].rotation.x=Math.sin(t*1.6)*.2-.2;ud.body.rotation.z=Math.sin(t*1.6)*.04;
+    const tg=near?Math.atan2(px-boss.position.x,pz-boss.position.z):Math.atan2(-boss.position.x,-boss.position.z)*0;let d=tg-boss.rotation.y;d=Math.atan2(Math.sin(d),Math.cos(d));boss.rotation.y+=d*Math.min(1,dt*4);
+    if(bs.t<=0)bossGo()},
+  down:c=>{const {dt,t,px,pz,near,talking,ud}=c;bs.hop+=dt/.45;const k=Math.min(1,bs.hop);const w=bs.wp[0];const tx=bs.from.x+(w.x-bs.from.x)*.35,tz=bs.from.z+(w.z-bs.from.z)*.35;
+    boss.position.x=bs.from.x+(tx-bs.from.x)*k;boss.position.z=bs.from.z+(tz-bs.from.z)*k;boss.position.y=.62*(1-k)+Math.sin(Math.PI*k)*.5;ud.body.scale.y=k>.9?.92:1;if(k>=1){bs.mode="walk";boss.position.y=0;ud.body.scale.y=1}},
+  walk:c=>{const {dt,t,px,pz,near,talking,ud}=c;const f=Patrol.follow(boss.position,bs.wp,dt,{speed:3.6,arrive:.25});
+    if(f.reached){if(f.done){bs.mode="up";bs.hop=0;const S=SOAP[TOUR[bs.i]];bs.from={x:boss.position.x,z:boss.position.z,tx:S.x,tz:S.z}}}
+    else{boss.position.y=heightAt(boss.position.x,boss.position.z);Wander.turnToward(boss,Math.atan2(f.dx,f.dz),dt,8);c.walking=true}},
+  up:c=>{const {dt,t,px,pz,near,talking,ud}=c;bs.hop+=dt/.5;const k=Math.min(1,bs.hop);boss.position.x=bs.from.x+(bs.from.tx-bs.from.x)*k;boss.position.z=bs.from.z+(bs.from.tz-bs.from.z)*k;boss.position.y=.62*k+Math.sin(Math.PI*k)*.6;
+    ud.body.scale.y=k<.15?.9:1;let d=-boss.rotation.y;d=Math.atan2(Math.sin(d),Math.cos(d));boss.rotation.y+=d*Math.min(1,dt*6);
+    if(k>=1){bs.mode="speak";bs.t=9;bs.line=(bs.line+1)%LINES.length;boss.position.y=.62;ud.body.scale.y=1}}});
 function bossStep(dt,t,px,pz){
   const near=!sbMode&&Math.hypot(boss.position.x-px,boss.position.z-pz)<4.2;
   const talking=!sheet.hidden&&sheet.innerHTML.includes("四姐");
   const ud=boss.userData;let walking=false;
-  if(bs.mode==="speak"){boss.position.y=.62;if(!talking&&!near)bs.t-=dt;else bs.t=Math.max(bs.t,3);
-    ud.A[0].rotation.x=-2.3+Math.sin(t*3.2)*.35;ud.A[1].rotation.x=Math.sin(t*1.6)*.2-.2;ud.body.rotation.z=Math.sin(t*1.6)*.04;
-    const tg=near?Math.atan2(px-boss.position.x,pz-boss.position.z):Math.atan2(-boss.position.x,-boss.position.z)*0;let d=tg-boss.rotation.y;d=Math.atan2(Math.sin(d),Math.cos(d));boss.rotation.y+=d*Math.min(1,dt*4);
-    if(bs.t<=0)bossGo()}
-  else if(bs.mode==="down"){bs.hop+=dt/.45;const k=Math.min(1,bs.hop);const w=bs.wp[0];const tx=bs.from.x+(w.x-bs.from.x)*.35,tz=bs.from.z+(w.z-bs.from.z)*.35;
-    boss.position.x=bs.from.x+(tx-bs.from.x)*k;boss.position.z=bs.from.z+(tz-bs.from.z)*k;boss.position.y=.62*(1-k)+Math.sin(Math.PI*k)*.5;ud.body.scale.y=k>.9?.92:1;if(k>=1){bs.mode="walk";boss.position.y=0;ud.body.scale.y=1}}
-  else if(bs.mode==="walk"){const w=bs.wp[0];const dx=w.x-boss.position.x,dz=w.z-boss.position.z,L=Math.hypot(dx,dz);
-    if(L<.25){bs.wp.shift();if(!bs.wp.length){bs.mode="up";bs.hop=0;const S=SOAP[TOUR[bs.i]];bs.from={x:boss.position.x,z:boss.position.z,tx:S.x,tz:S.z}}}
-    else{const sp=3.6*dt;boss.position.x+=dx/L*Math.min(sp,L);boss.position.z+=dz/L*Math.min(sp,L);boss.position.y=heightAt(boss.position.x,boss.position.z);const ang=Math.atan2(dx,dz);let d=ang-boss.rotation.y;d=Math.atan2(Math.sin(d),Math.cos(d));boss.rotation.y+=d*Math.min(1,dt*8);walking=true}}
-  else if(bs.mode==="up"){bs.hop+=dt/.5;const k=Math.min(1,bs.hop);boss.position.x=bs.from.x+(bs.from.tx-bs.from.x)*k;boss.position.z=bs.from.z+(bs.from.tz-bs.from.z)*k;boss.position.y=.62*k+Math.sin(Math.PI*k)*.6;
-    ud.body.scale.y=k<.15?.9:1;let d=-boss.rotation.y;d=Math.atan2(Math.sin(d),Math.cos(d));boss.rotation.y+=d*Math.min(1,dt*6);
-    if(k>=1){bs.mode="speak";bs.t=9;bs.line=(bs.line+1)%LINES.length;boss.position.y=.62;ud.body.scale.y=1}}
+  const c={dt,t,px,pz,near,talking,ud,walking:false};BOSS_SM.step(c);walking=c.walking;
   bs.wt+=walking?dt*9:0;const sw=walking?Math.sin(bs.wt)*.55:0;
   ud.L[0].rotation.x=sw;ud.L[1].rotation.x=-sw;if(bs.mode!=="speak"){ud.A[0].rotation.x=-sw*.8;ud.A[1].rotation.x=sw*.8;ud.body.rotation.z=0}
   ud.body.position.y=walking?Math.abs(Math.sin(bs.wt))*.06:Math.sin(t*2)*.02;
@@ -1553,7 +1558,7 @@ const TRM={book(g){rbox(.6,.18,.8,0xb23b2f,0,0,0,g,.04);box(.62,.05,.82,0xf2e6c8
  ribbon(g){const a=rbox(.22,.9,.05,0xffffff,-.12,-.45,0,g,.03);a.material=ribbonTex("wave");a.rotation.z=.35;const b=rbox(.22,.9,.05,0xffffff,.12,-.45,0,g,.03);b.material=ribbonTex("dots");b.rotation.z=-.35;sph(.14,0xf27fae,0,.02,0,g,10);}};
 const TRO=TRS.map(t=>{const X=ISLX[t.isl];const [x,z]=freeSpot(X);const g=new THREE.Group();g.position.set(x,.6,z);scene.add(g);TRM[t.id](g);g.visible=!st.items[t.id];
   const glow=new THREE.Mesh(new THREE.CircleGeometry(.7,20),new THREE.MeshBasicMaterial({color:0xfff2b0,transparent:true,opacity:.45}));glow.rotation.x=-Math.PI/2;glow.position.set(x,.05,z);glow.visible=g.visible;scene.add(glow);return {t,g,glow,x,z}});
-function celebrate(){if(RM)return;let k=0;const tm=setInterval(()=>{const p=player.position;burst(p.x+(Math.random()-.5)*8,6+Math.random()*4,p.z+(Math.random()-.5)*8);if(++k>=6)clearInterval(tm)},700);
+function celebrate(){if(RM)return;CONFETTI.shower(()=>player.position,{times:6,interval:700,spread:8,yMin:6,yRange:4});
   if(!window.__plane)return;const pl=__plane(scene);pl.scale.setScalar(1.6);const bn=sign("謝謝你逛完桃園政策島",7,1.3,"#c99a2e","#fff",-9.5,.1,0,pl,{fs:58});bn.material.side=THREE.DoubleSide;box(2.4,.03,.03,0x8a8f94,-5.2,.1,0,pl);
   pl.rotation.y=Math.PI;const p0=player.position.clone();let T=0;ANIM.push((t,dt)=>{if(!pl.visible)return;T+=dt;pl.position.set(p0.x+60-T*9,16,p0.z-6);bn.rotation.x=Math.sin(t*5)*.12;if(T>14){pl.visible=false}})}
 function pickItem(o){st.items[o.t.id]=1;o.g.visible=o.glow.visible=false;burst(o.x,1,o.z);save();progress();
@@ -1675,9 +1680,8 @@ function step(){
   npcObjs.forEach((n,i)=>{const u=n.obj.userData,o=n.obj.position;
     const d=sbMode?99:Math.hypot(o.x-px,o.z-pz);if(d<3.4&&d<nd){nd=d;near={label:`和${n.p.name}聊聊`,act:()=>openTalk(n.p)}}
     const talking=!sheet.hidden&&sheet.innerHTML.includes(n.p.name);let moving=false;
-    if(d<5.5||talking){const tg=Math.atan2(px-o.x,pz-o.z);let dd=tg-n.obj.rotation.y;dd=Math.atan2(Math.sin(dd),Math.cos(dd));n.obj.rotation.y+=dd*Math.min(1,dt*4)}
-    else if(n.pause>0){n.pause-=dt}
-    else{if(!n.tgt)n.tgt=npcTarget(n);if(!n.tgt){n.pause=.3}else{const dx=n.tgt.x-o.x,dz=n.tgt.z-o.z,L=Math.hypot(dx,dz);if(L<.15){n.tgt=null}else{const sp=Math.min(L,1.05*dt);o.x+=dx/L*sp;o.z+=dz/L*sp;let dd=Math.atan2(dx,dz)-n.obj.rotation.y;dd=Math.atan2(Math.sin(dd),Math.cos(dd));n.obj.rotation.y+=dd*Math.min(1,dt*6);moving=true}}}
+    if(d<5.5||talking)Wander.turnToward(n.obj,Math.atan2(px-o.x,pz-o.z),dt,4);
+    else moving=Wander.step(n,n.obj,dt,{pick:npcTarget,speed:1.05,turn:6,arrive:.15,retry:.3});
     n.wt+=moving?dt*7:0;const q=moving?Math.sin(n.wt)*.5:0;u.L[0].rotation.x=q;u.L[1].rotation.x=-q;
     u.A[1].rotation.x=d<3.4?-2.6+Math.sin(t*7)*.35:(moving?q*.6:Math.sin(t*1.1+n.ph)*.06);u.A[0].rotation.x=moving?-q*.6:-Math.sin(t*1.1+n.ph)*.06;
     u.body.position.y=moving?Math.abs(Math.sin(n.wt))*.04:0;u.body.scale.y=1+Math.sin(t*2+n.ph)*.015;u.head.rotation.x=d<3.4?-.1:Math.sin(t*.5+n.ph)*.05;blink(u,dt);
@@ -1688,7 +1692,7 @@ function step(){
   const bnear=bossStep(dt,t,px,pz);
   if(bnear){const bd=Math.hypot(boss.position.x-px,boss.position.z-pz);if(bd<nd){nd=bd;near={label:"和四姐聊聊",act:()=>openBoss()}}}
   if(!sbMode){const sd=Math.hypot(sgx-px,sgz-pz);if(sd<2.6&&sd<nd){nd=sd;near={label:"看路牌",act:openSign}}}
-  TRO.forEach((o,k)=>{if(st.items[o.t.id])return;o.g.rotation.y=t*1.2;o.g.position.y=.7+Math.sin(t*3+k)*.12;o.glow.material.opacity=.3+Math.sin(t*3+k)*.15;if(!sbMode&&Math.hypot(o.x-px,o.z-pz)<1.4)pickItem(o)});
+  Pickups3D.update(TRO,t,px,pz,{taken:o=>st.items[o.t.id],onPick:pickItem,enabled:!sbMode,radius:1.4,baseY:.7,bob:.12,spin:1.2});
   st.near=near;
   const tb=$("talk");if(near&&sheet.hidden){tb.hidden=false;tb.textContent=near.label;tb.onclick=near.act}else tb.hidden=true;
   /* bus: arrive → wait → (boarding) → ride → leave */
@@ -1696,12 +1700,12 @@ function step(){
     if(busS.mode==="arrive"){eggT+=dt/3;const kq=Math.min(1,eggT),e=1-Math.pow(1-kq,3);egg.position.lerpVectors(eggA,eggB,e);egg.position.y=heightAt(egg.position.x,egg.position.z)+Math.abs(Math.sin(t*20))*.03*(1-kq);spinW(8*(1-kq));
       if(kq>=1){busS.mode="wait";busS.t=25;toast("叮咚，公車準點進站！四姐：「公車準點，大家才敢搭。」",3000);setTimeout(()=>{if(busS.mode==="wait")openRide()},900)}}
     else if(busS.mode==="wait"){busS.t-=dt;egg.position.y=Math.sin(t*3)*.01;if(busS.t<=0){busS.mode="leave";busS.t=0;if(!sheet.hidden&&sheet.innerHTML.includes("公車到站"))closeSheet()}}
-    else if(busS.mode==="ride"){const w=busS.wp[0];const dx=w.x-egg.position.x,dz=w.z-egg.position.z,L=Math.hypot(dx,dz);
-      if(L<.3){busS.wp.shift();if(!busS.wp.length){busS.mode="leave";busS.t=0;const side=busS.head+Math.PI/2;player.position.set(egg.position.x+Math.cos(side)*1.7,0,egg.position.z-Math.sin(side)*1.7);player.visible=shadowDisc.visible=true;burst(player.position.x,1.5,player.position.z);toast(`到站：${busS.dest.name}島`)}}
-      else{const sp=Math.min(L,8*dt);egg.position.x+=dx/L*sp;egg.position.z+=dz/L*sp;const hd=Math.atan2(-dz,dx);let d=hd-busS.head;d=Math.atan2(Math.sin(d),Math.cos(d));busS.head+=d*Math.min(1,dt*7);egg.rotation.y=busS.head;egg.position.y=heightAt(egg.position.x,egg.position.z)+Math.abs(Math.sin(t*16))*.025;spinW(10)}}
+    else if(busS.mode==="ride"){const f=Patrol.follow(egg.position,busS.wp,dt,{speed:8,arrive:.3});
+      if(f.reached){if(f.done){busS.mode="leave";busS.t=0;const side=busS.head+Math.PI/2;player.position.set(egg.position.x+Math.cos(side)*1.7,0,egg.position.z-Math.sin(side)*1.7);player.visible=shadowDisc.visible=true;burst(player.position.x,1.5,player.position.z);toast(`到站：${busS.dest.name}島`)}}
+      else{busS.head=Wander.turnAngle(busS.head,Math.atan2(-f.dz,f.dx),dt,7);egg.rotation.y=busS.head;egg.position.y=heightAt(egg.position.x,egg.position.z)+Math.abs(Math.sin(t*16))*.025;spinW(10)}}
     else if(busS.mode==="leave"){busS.t+=dt;const sp=6*dt*Math.min(1,busS.t*1.5);egg.position.x+=Math.cos(busS.head)*sp;egg.position.z-=Math.sin(busS.head)*sp;egg.position.y=heightAt(egg.position.x,egg.position.z);spinW(8);egg.scale.setScalar(Math.max(.01,1-Math.max(0,busS.t-1.4)/.6));
       if(busS.t>2){egg.visible=false;egg.scale.setScalar(1);busS.mode="off"}}}
-  CONF.forEach(c=>{if(c.life<=0)return;c.life-=dt;c.v.y-=12*dt;c.m.position.addScaledVector(c.v,dt);c.m.rotation.x+=c.spin.x*dt;c.m.rotation.z+=c.spin.z*dt;c.m.scale.setScalar(Math.max(.01,Math.min(1,c.life)));if(c.life<=0)c.m.visible=false});
+  CONFETTI.update(dt);
   if(!RM){waves(t);ANIM.forEach(f=>f(t,dt))}
   clouds.forEach((c,i)=>{c.visible=!sbMode;c.position.x+=dt*(.6+i*.05);if(c.position.x>140)c.position.x=-140});
   birds.forEach(b=>{const a=t*b.sp+b.ph;b.g.position.set(Math.cos(a)*b.r,b.h+Math.sin(t*1.3+b.ph)*.6,Math.sin(a)*b.r*.7);b.g.rotation.y=-a;const f=Math.sin(t*9+b.ph)*.5;b.wl.rotation.z=f;b.wr.rotation.z=-f});
