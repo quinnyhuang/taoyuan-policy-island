@@ -259,6 +259,8 @@ button:focus-visible,a:focus-visible{outline:3px solid var(--peach);outline-offs
 <script src="hud-fold.js"></script>
 <script src="search-index.js"></script>
 <script src="friend-links.js"></script>
+<script src="stamp-book.js"></script>
+<script src="dialogue.js"></script>
 <script>
 const SRC={
  c0727:["中央社｜黃世杰公布首波政見 六大面向","https://www.cna.com.tw/news/aloc/202607270113.aspx","2026-07-27"],
@@ -486,7 +488,9 @@ const nItems=()=>TRS.filter(t=>st.items[t.id]).length;
 const nStamps=()=>ISL.filter(i=>st.isl[i.id]).length+NPCS.filter(p=>st.done[p.id]).length;
 const STAMP_TOTAL=()=>ISL.length+NPCS.length;
 function nextHint(){const t=TRS.find(t=>!st.items[t.id]);return t?t.hint:null}
-function stampCheck(){progress();if(nStamps()===STAMP_TOTAL()&&!st.certShown){st.certShown=true;save();setTimeout(()=>{toast("集章完成！你可以領取「桃園政策島完走證」了。",4200);openCert()},900)}}
+const BOOK=StampBook.create({count:nStamps,total:STAMP_TOTAL,isClaimed:()=>st.certShown,claim:()=>{st.certShown=true;save()},
+  onComplete:()=>setTimeout(()=>{toast("集章完成！你可以領取「桃園政策島完走證」了。",4200);openCert()},900)});
+function stampCheck(){progress();BOOK.check()}
 function progress(){if($("pTxt")){$("pTxt").textContent=`${nStamps()} / ${STAMP_TOTAL()}`;const ni=nItems();$("pBadge").hidden=!ni;$("pBadge").textContent=`寶物 ${ni}/6`}window.renderIdx&&$("plist")&&renderIdx($("pq")?$("pq").value:"");
   const n=NPCS.filter(p=>st.done[p.id]).length;
   
@@ -502,13 +506,12 @@ const tagOf=i=>`第 ${i.n} 島`+(i.kind==="official"?" · 首波六大政見":""
 const subT=i=>i.card.t.split("：").slice(1).join("：")||i.card.t;
 function openTalk(p,i=0){
   const isl=islOf(p.isl);
-  open(`<div class="npc-head"><div><div class="eyebrow ">${tagOf(isl)} · ${isl.name}</div><h2>${p.name}</h2><small>${p.role}（虛構角色）</small></div></div>
-   <div class="bubble">${p.lines[i]}</div>
-   <div class="row">${i<p.lines.length-1?`<button class="btn pri" id="nx">繼續聽（${i+1}/${p.lines.length}）</button>`:`<button class="btn pri" id="pc">看政見卡</button>`}<button class="btn" id="sk">直接看政見卡</button></div>`);
-  const nx=$("nx");if(nx)nx.onclick=()=>openTalk(p,i+1);
-  const pc=$("pc");if(pc)pc.onclick=()=>openCard(isl);
-  $("sk").onclick=()=>{markNpc(p);openCard(isl)};
-  if(i===p.lines.length-1)markNpc(p);
+  Dialogue.show({open:h=>open(h),i,count:p.lines.length,nextId:"nx",nextLabel:"繼續聽",
+   head:{eyebrow:`${tagOf(isl)} · ${isl.name}`,eyebrowClass:" ",name:p.name,note:`${p.role}（虛構角色）`},
+   text:i=>p.lines[i],end:`<button class="btn pri" id="pc">看政見卡</button>`,always:`<button class="btn" id="sk">直接看政見卡</button>`,
+   after:(i,last)=>{const pc=$("pc");if(pc)pc.onclick=()=>openCard(isl);
+    $("sk").onclick=()=>{markNpc(p);openCard(isl)};
+    if(last)markNpc(p)}});
 }
 function markNpc(p){if(!st.done[p.id]){st.done[p.id]=1;stampCheck();window.markDone&&markDone(p);if(NPCS.every(q=>st.done[q.id]))toast(`${NPCS.length} 位市民都聽完了！去找四姐聊聊吧。`,4200)}}
 function openCard(isl,hl=-1){if(!st.isl[isl.id]){st.isl[isl.id]=1;setTimeout(stampCheck,50)}
@@ -539,18 +542,19 @@ function openIndex(){
 /* 四姐 */
 function openBoss(step=0){
   const L=["嗨！我是四姐，依桃園市長參選人黃世杰的形象設計的角色。我會在各島的肥皂箱之間跑來跑去，跟大家聊政見。","這裡有 14 座政策島：首波六大政見在其中 5 座（交通島也包含科技執法），其他是延伸政見。島上的編號物件是具體目標，17 位市民會告訴你每項政見在說什麼。","想先認識我，還是直接看政見總覽？"];
-  const all=NPCS.every(p=>st.done[p.id]);
-  open(`<div class="npc-head"><div><div class="eyebrow" style="color:var(--gold)">巡迴中</div><h2>四姐</h2><small>依黃世杰形象設計的角色；台詞由本頁撰寫，不是本人發言</small></div></div>
-   <div class="bubble">${step<L.length?L[step]:(all?`${NPCS.length} 位市民都聽完了，謝謝你逛完整座島！`:L[2])}${step>=L.length-1?(st.items.book?"<br><br>咦，你撿到「行動小六法」了？那是學弟沈伯洋在文宣上給我取的綽號。":"")+(nItems()<6?`<br><br>🔎 尋寶 ${nItems()}/6：${nextHint()}`:"<br><br>🎉 6 件寶物都找到了，你是尋寶達人！"):""}</div>
-   <div class="row">${step<L.length-1?`<button class="btn pri" id="bn">繼續（${step+1}/${L.length}）</button>`:`
-     <button class="btn pri" id="b1">學經歷</button><button class="btn sec" id="b2">政見總覽</button><button class="btn gold" id="b3">叫公車</button><button class="btn gold" id="b4">建中同學是誰？</button>`}</div>`);
-  const bn=$("bn");if(bn)bn.onclick=()=>openBoss(step+1);
+Dialogue.show({open:h=>open(h),i:step,count:L.length,nextId:"bn",
+ head:{eyebrow:"巡迴中",eyebrowStyle:"color:var(--gold)",name:"四姐",note:"依黃世杰形象設計的角色；台詞由本頁撰寫，不是本人發言"},
+ text:step=>{const all=NPCS.every(p=>st.done[p.id]);return `${step<L.length?L[step]:(all?`${NPCS.length} 位市民都聽完了，謝謝你逛完整座島！`:L[2])}${step>=L.length-1?(st.items.book?"<br><br>咦，你撿到「行動小六法」了？那是學弟沈伯洋在文宣上給我取的綽號。":"")+(nItems()<6?`<br><br>🔎 尋寶 ${nItems()}/6：${nextHint()}`:"<br><br>🎉 6 件寶物都找到了，你是尋寶達人！"):""}`},
+ end:`
+     <button class="btn pri" id="b1">學經歷</button><button class="btn sec" id="b2">政見總覽</button><button class="btn gold" id="b3">叫公車</button><button class="btn gold" id="b4">建中同學是誰？</button>`,
+ after:()=>{
   const b1=$("b1");
   if(b1){
     b1.onclick=openCV;$("b2").onclick=openIndex;
     $("b3").onclick=()=>{closeSheet();window.busEgg&&busEgg()};
     $("b4").onclick=()=>{open(`<div class="npc-head"><div><h2>四姐</h2><small>彩蛋</small></div></div><div class="bubble">我和台北市長蔣萬安是建中高二、高三的同班同學。</div><p class="fine">依黃世杰競選文宣自述。</p><div class="row"><button class="btn" id="bb">回去</button></div>`);$("bb").onclick=()=>openBoss(9)};
   }
+}})
 }
 function openCV(tab=0){
   const T=[["學歷"],["立委 2020–2024"],["法務部次長 2024–2026"]];
@@ -573,12 +577,11 @@ const FRIEND=FriendLinks.create(FRIENDS,{open:h=>open(h),
 function openFriend(k){FRIEND.open(k)}
 
 function openPassport(){const ok=nStamps()===STAMP_TOTAL();
-  const stp=(on,txt,sub)=>`<div class="stp ${on?'on':''}"><i>${on?'✓':''}</i><b>${txt}</b>${sub?`<small>${sub}</small>`:""}</div>`;
   open(`<div class="eyebrow">集章護照</div><h2 style="font-family:var(--f-display);font-weight:400;margin:4px 0 4px;font-size:26px">已蓋 ${nStamps()} / ${STAMP_TOTAL()} 個章</h2>
    <p class="fine" style="margin-top:0">看完一座島的政見卡，或聽完一位市民說話，就能蓋一個章。蓋滿可以領「桃園政策島完走證」。</p>
-   <h3 class="ph3">政策島</h3><div class="stps">${ISL.map(i=>stp(st.isl[i.id],i.name,"第 "+i.n+" 島")).join("")}</div>
-   <h3 class="ph3">市民</h3><div class="stps">${NPCS.map(p=>stp(st.done[p.id],p.name,islOf(p.isl).name)).join("")}</div>
-   <h3 class="ph3">隱藏寶物 ${nItems()}/6</h3><div class="stps">${TRS.map(t=>st.items[t.id]?stp(1,t.name,"解鎖："+t.unlock):stp(0,"？？？","尚未找到")).join("")}</div>
+   ${StampBook.section("政策島",ISL,i=>[st.isl[i.id],i.name,"第 "+i.n+" 島"])}
+   ${StampBook.section("市民",NPCS,p=>[st.done[p.id],p.name,islOf(p.isl).name])}
+   ${StampBook.section(`隱藏寶物 ${nItems()}/6`,TRS,t=>st.items[t.id]?[1,t.name,"解鎖："+t.unlock]:[0,"？？？","尚未找到"])}
    ${nItems()<6?`<p class="fine">提示：${nextHint()}</p>`:`<p class="fine">6 件寶物全部找到，解鎖金色圍巾與金色完走證！</p>`}
    <div class="row"><button class="btn pri" id="gocert" ${ok?"":"disabled style='opacity:.45;cursor:not-allowed'"}>${ok?"領取完走證":"蓋滿才能領完走證"}</button><button class="btn" id="gochar">換裝</button></div>`);
   if(ok)$("gocert").onclick=openCert;$("gochar").onclick=openChar}
