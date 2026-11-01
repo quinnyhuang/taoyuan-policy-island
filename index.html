@@ -253,6 +253,9 @@ button:focus-visible,a:focus-visible{outline:3px solid var(--peach);outline-offs
 <div class="intro" id="intro"><div class="card" id="introCard"></div></div>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script src="load-guard.js"></script>
+<script src="source-refs.js"></script>
+<script src="share-card.js"></script>
 <script>
 const SRC={
  c0727:["中央社｜黃世杰公布首波政見 六大面向","https://www.cna.com.tw/news/aloc/202607270113.aspx","2026-07-27"],
@@ -310,6 +313,7 @@ const SRC={
  cna1217:["中央社｜立院初審詐防條例加重詐騙刑責 增訂禁奢條款","https://www.cna.com.tw/news/aipl/202512170105.aspx","2025-12-17"],
  ly:["立法院全球資訊網｜黃世杰委員（第10屆）","https://www.ly.gov.tw/Pages/List.aspx?nodeid=38607","官方資料"]
 };
+const REF=SourceRefs.create(SRC);
 
 /* 14 座島：official＝首波六大政見所在島（交通島含科技執法），ext＝延伸政見。NPC 皆為虛構市民，台詞轉述有出處的政見內容 */
 const ISL=[
@@ -490,7 +494,7 @@ let toastT;function toast(t,ms=3200){const el=$("toast");el.textContent=t;el.hid
 const sheet=$("sheet");
 function closeSheet(){sheet.hidden=true;sheet.innerHTML=""}
 function open(html){sheet.hidden=false;sheet.innerHTML=`<button class="x" aria-label="關閉">×</button>`+html;sheet.scrollTop=0;sheet.querySelector(".x").onclick=closeSheet}
-const srcList=keys=>`<div class="srcs">${keys.map(k=>`<a href="${SRC[k][1]}" target="_blank" rel="noopener">${SRC[k][0]} ↗<span>${SRC[k][2]}</span></a>`).join("")}</div>`;
+const srcList=REF.list;
 const tagOf=i=>`第 ${i.n} 島`+(i.kind==="official"?" · 首波六大政見":"");
 const subT=i=>i.card.t.split("：").slice(1).join("：")||i.card.t;
 function openTalk(p,i=0){
@@ -511,7 +515,7 @@ function openCard(isl,hl=-1){if(!st.isl[isl.id]){st.isl[isl.id]=1;setTimeout(sta
    ${c.nums?`<div class="nums">${c.nums.map(n=>`<div class="num"><b>${n[0]}</b><span>${n[1]}</span></div>`).join("")}</div>`:""}
    <h3>具體目標（島上的編號物件）</h3><div class="hexes">${isl.subs.map((s,i)=>`<div class="hx  ${i===hl?'hl':''}">${"①②③④⑤⑥"[i]} ${s[0]}<small>${s[1]}</small></div>`).join("")}</div>
    <h3>政見內容</h3><ul>${c.pts.map(p=>`<li>${p}</li>`).join("")}</ul>
-   ${c.q?`<blockquote class="quote">「${c.q[0]}」<cite>黃世杰，${SRC[c.q[1]][2]}，見${SRC[c.q[1]][0].split("｜")[0]}</cite></blockquote>`:""}
+   ${c.q?`<blockquote class="quote">「${c.q[0]}」<cite>黃世杰，${REF.get(c.q[1]).date}，見${REF.get(c.q[1]).outlet}</cite></blockquote>`:""}
    ${c.note?`<div class="note">${c.note}</div>`:""}
    <h3>出處</h3>${srcList(c.src)}
    <p class="fine">依公開報導與競選公開文宣整理；未加引號者為對政見的轉述。標示「競選方」的數字由候選人陣營引述，本頁未另行查證。</p>
@@ -582,7 +586,7 @@ function openCert(){
    <div class="cvtab" id="certFmt" style="margin-top:12px"><button data-f="story" class="${st.certFmt!=="post"?"on":""}">限時動態／手機桌布 9:16</button><button data-f="post" class="${st.certFmt==="post"?"on":""}">貼文 4:5</button></div>
    <div id="certOut" style="margin-top:6px"></div>`);
   $("mk").onclick=()=>{st.nick=$("nick").value.trim();save();drawCert()};
-  sheet.querySelectorAll("#certFmt button").forEach(b=>b.onclick=()=>{st.certFmt=b.dataset.f;sheet.querySelectorAll("#certFmt button").forEach(x=>x.classList.toggle("on",x===b));drawCert()});
+  ShareCard.bindFormatTabs($("certFmt"),f=>{st.certFmt=f;drawCert()});
   if(st.nick)drawCert()}
 function certPenguin(c,px,py,s,sc,rib,gl){const E=(x,y,rx,ry,col,r=0)=>{c.fillStyle=col;c.beginPath();c.ellipse(x,y,rx,ry,r,0,7);c.fill()};const D="#26323a",W="#fbfaf6",BK="#f29a38";
   c.save();c.translate(px,py);c.scale(s,s);
@@ -597,10 +601,12 @@ function certPenguin(c,px,py,s,sc,rib,gl){const E=(x,y,rx,ry,col,r=0)=>{c.fillSt
   if(rib){c.fillStyle="#5bbbe6";c.beginPath();c.moveTo(56,14);c.lineTo(80,14);c.lineTo(90,80);c.lineTo(64,84);c.fill();c.strokeStyle="#f06aa0";c.lineWidth=3;c.beginPath();for(let y=18;y<80;y+=2)c.lineTo(73+(y-18)*.15+Math.sin(y*.3)*4,y);c.stroke();
     [[40,34],[44,64]].forEach(([x,y])=>{c.fillStyle="#5bbbe6";c.beginPath();c.arc(x,y,7,Math.PI,0);c.fill();c.fillStyle="#a6d22e";c.beginPath();c.arc(x,y,7,0,Math.PI);c.fill()})}
   c.restore()}
-function drawCert(){const gold=nItems()===6,story=st.certFmt!=="post";const W=1080,H=story?1920:1350,cv=document.createElement("canvas");cv.width=W;cv.height=H;const c=cv.getContext("2d");
+function drawCert(){const gold=nItems()===6;
+ShareCard.render({format:st.certFmt==="post"?"post":"story",out:"certOut",fileName:"桃園政策島完走證.png",title:"桃園政策島完走證",text:"我逛完桃園政策島了！",onUnsupported:toast,
+ draw:(c,{W,H,story})=>{
   const F='"Huninn","Noto Sans TC","PingFang TC","Microsoft JhengHei",sans-serif',FB='"Noto Sans TC","PingFang TC","Microsoft JhengHei",sans-serif';
   const L=story?{tag:250,title:370,tfs:96,py:700,ps:1.32,name:1000,sub:1070,st:1180,sr:112,gold:1690,date:H-150,note:H-104}:{tag:130,title:230,tfs:86,py:420,ps:.92,name:650,sub:708,st:790,sr:98,gold:1190,date:H-96,note:H-64};
-  const go=()=>{const acc=gold?"#c99a2e":"#2c6e80";
+  const acc=gold?"#c99a2e":"#2c6e80";
   c.fillStyle="#f4ede0";c.fillRect(0,0,W,H);c.fillStyle=acc;c.fillRect(0,0,W,18);c.fillRect(0,H-18,W,18);
   c.strokeStyle=acc;c.lineWidth=6;c.strokeRect(40,40,W-80,H-80);c.lineWidth=2;c.strokeRect(56,56,W-112,H-112);
   c.textAlign="center";c.fillStyle=acc;c.font=`700 30px ${FB}`;c.fillText(gold?"TAOYUAN POLICY ISLAND · GOLD":"TAOYUAN POLICY ISLAND",W/2,L.tag);
@@ -616,11 +622,7 @@ function drawCert(){const gold=nItems()===6,story=st.certFmt!=="post";const W=10
   if(gold){c.fillStyle="#c99a2e";c.font=`700 34px ${FB}`;c.fillText("★ 尋寶達人：6 件隱藏寶物全數找到 ★",W/2,L.gold)}
   c.fillStyle="#6b7c7b";c.font=`26px ${FB}`;const d=new Date();c.fillText(`${d.getFullYear()}.${d.getMonth()+1}.${d.getDate()}`,W/2,L.date);
   c.font=`22px ${FB}`;c.fillText("非官方網站・依公開報導與競選公開文宣整理",W/2,L.note);
-  cv.toBlob(b=>{const url=URL.createObjectURL(b);const out=$("certOut");if(!out)return;
-    out.innerHTML=`<img src="${url}" alt="桃園政策島完走證" style="width:100%;max-width:${story?"340px":"100%"};display:block;margin:0 auto;border-radius:12px;box-shadow:var(--shadow)"><p class="fine">手機請長按圖片存檔；電腦可以按「下載」。</p><div class="row"><button class="btn pri" id="shr">分享</button><a class="btn" id="dl" href="${url}" download="桃園政策島完走證.png" style="text-decoration:none">下載</a></div>`;
-    const f=new File([b],"桃園政策島完走證.png",{type:"image/png"});
-    $("shr").onclick=async()=>{try{if(navigator.canShare&&navigator.canShare({files:[f]}))await navigator.share({files:[f],title:"桃園政策島完走證",text:"我逛完桃園政策島了！"});else{toast("這個瀏覽器不支援直接分享，請長按圖片存檔或按下載。")}}catch(e){}}},"image/png")};
-  (document.fonts&&document.fonts.ready?document.fonts.ready:Promise.resolve()).then(go)}
+ }})}
 function openSign(){
   open(`<div class="eyebrow ext">彩蛋 · 往台北的路牌</div><h2 style="font-family:var(--f-display);font-weight:400;margin:4px 0 8px;font-size:24px">隔壁也在講客語</h2>
    <p>台北市約 40 萬客家人口。民進黨台北市長參選人沈伯洋的客語主張，包括招聘時給通過客語認證者加分或優先、推出客家幣與客家券，以及在社區共照中心讓長輩和孩子用客語互動。</p>
@@ -685,13 +687,12 @@ progress();intro();renderIdx();
 let renderer=null;
 window.travelNpc=p=>openTalk(p);window.travelIsl=i=>openCard(i);
 function noGL(why){$("stage").innerHTML=`<div id="nogl"><div><h2 style="font-family:var(--f-display);font-weight:400">3D 場景暫時無法顯示</h2><p>${why}</p><p><button class="btn pri" onclick="location.reload()">重新整理</button></p><p class="fine">如果一直出現：關掉其他開著這個網站的分頁再試；電腦版請確認瀏覽器設定裡的「硬體加速」有開啟。也可以先用右邊的「政見索引」閱讀所有政見卡。</p></div></div>`}
-const THREE_CDN=["https://cdn.jsdelivr.net/npm/three@0.128.0/build/three.min.js","https://unpkg.com/three@0.128.0/build/three.min.js"];
-function ensureThree(k=0){if(typeof THREE!=="undefined")return init3D();if(k>=THREE_CDN.length)return noGL("3D 元件下載失敗，可能是網路不穩。");const sc=document.createElement("script");sc.src=THREE_CDN[k];sc.onload=()=>ensureThree(k+1);sc.onerror=()=>ensureThree(k+1);document.head.appendChild(sc)}
-function init3D(tries=0){try{renderer=new THREE.WebGLRenderer({antialias:true,powerPreference:"default",failIfMajorPerformanceCaveat:false})}catch(e){renderer=null}
-  if(!renderer){if(tries<2)return setTimeout(()=>init3D(tries+1),800);return noGL("瀏覽器目前沒有提供 WebGL（3D 繪圖功能）。")}
-  renderer.domElement.addEventListener("webglcontextlost",e=>{e.preventDefault();noGL("顯示卡暫時中斷了 3D 繪圖，重新整理就會恢復。")});
-  run3D()}
-ensureThree();
+LoadGuard.loadScript({test:()=>typeof THREE!=="undefined",
+  urls:["https://cdn.jsdelivr.net/npm/three@0.128.0/build/three.min.js","https://unpkg.com/three@0.128.0/build/three.min.js"],
+  onReady:init3D,onFail:()=>noGL("3D 元件下載失敗，可能是網路不穩。")});
+function init3D(){LoadGuard.createRenderer({create:()=>new THREE.WebGLRenderer({antialias:true,powerPreference:"default",failIfMajorPerformanceCaveat:false}),retries:2,delay:800,
+  onFail:()=>noGL("瀏覽器目前沒有提供 WebGL（3D 繪圖功能）。"),
+  onReady:r=>{renderer=r;LoadGuard.watchContextLost(renderer.domElement,()=>noGL("顯示卡暫時中斷了 3D 繪圖，重新整理就會恢復。"));run3D()}})}
 function run3D(){(function(){
 const RM=matchMedia("(prefers-reduced-motion: reduce)").matches;
 const stage=$("stage");
