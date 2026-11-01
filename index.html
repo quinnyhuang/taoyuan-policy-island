@@ -256,6 +256,9 @@ button:focus-visible,a:focus-visible{outline:3px solid var(--peach);outline-offs
 <script src="load-guard.js"></script>
 <script src="source-refs.js"></script>
 <script src="share-card.js"></script>
+<script src="hud-fold.js"></script>
+<script src="search-index.js"></script>
+<script src="friend-links.js"></script>
 <script>
 const SRC={
  c0727:["中央社｜黃世杰公布首波政見 六大面向","https://www.cna.com.tw/news/aloc/202607270113.aspx","2026-07-27"],
@@ -565,9 +568,9 @@ function openCV(tab=0){
 const FRIENDS={penguin:{t:"桃園政策島（桃園小企鵝）",d:"另一位支持者做的政策地圖：桃園 13 區化成小島，政見主題與細項就蓋在島上。",u:"https://taoyuan-penguin.twcrowsnest.com/"},
  jinci:{t:"桃園幸福探索島｜黃世杰政策導覽",d:"另一位支持者做的 3D 小島：六座政策小島用長木橋串起來，還有愛情海婚船、桃小巴和小吃市集。",u:"https://www.jinci.com.tw/taoyuan/"},
  hexcity:{t:"桃園政策島｜黃世杰・心桃園 動起來",d:"另一位支持者做的 3D 六邊形小城：每格六邊形是一項政策主題，資料整理自公開報導。",u:"https://taoyuan-island.netlify.app/"}};
-function openFriend(k){const f=FRIENDS[k];open(`<div class="eyebrow" style="color:#d9645b">友站</div><h2 style="font-family:var(--f-display);font-weight:400;margin:4px 0 8px;font-size:26px;line-height:1.25">${f.t}</h2><p style="margin:0 0 14px">${f.d}</p>
-  <a class="btn pri" style="display:block;text-align:center;text-decoration:none;background:#d9645b;border-color:#d9645b" href="${f.u}" target="_blank" rel="noopener">前往 ${f.u.replace(/^https:\/\//,"").replace(/\/$/,"")} ↗</a>
-  <p class="fine">這是另一位支持者自製的網站，內容由該站作者整理。我們一起組成「<a href="https://taoyuan-penguin.twcrowsnest.com/ring/" target="_blank" rel="noopener">桃園政策島聯盟</a>」，可以互相串門子。</p>`)}
+const FRIEND=FriendLinks.create(FRIENDS,{open:h=>open(h),
+  note:`<p class="fine">這是另一位支持者自製的網站，內容由該站作者整理。我們一起組成「<a href="https://taoyuan-penguin.twcrowsnest.com/ring/" target="_blank" rel="noopener">桃園政策島聯盟</a>」，可以互相串門子。</p>`});
+function openFriend(k){FRIEND.open(k)}
 
 function openPassport(){const ok=nStamps()===STAMP_TOTAL();
   const stp=(on,txt,sub)=>`<div class="stp ${on?'on':''}"><i>${on?'✓':''}</i><b>${txt}</b>${sub?`<small>${sub}</small>`:""}</div>`;
@@ -661,9 +664,9 @@ const INTRO=[
  ["HELLO, TAOYUAN · 01","政見不只能讀，也能逛","14 座政策島裡，5 座放著黃世杰首波的六大政見（交通島也包含科技執法），其他 9 座是延伸政見；島上標著 ①②③ 的建築和道具，就是每項政見的具體目標。17 位市民散落在島上，四姐會在各島的肥皂箱之間巡迴。"],
  ["HELLO, TAOYUAN · 02","每張政見卡都有出處","市民是虛構角色，台詞轉述自公開報導；四姐是依候選人形象設計的角色。右上角「沙盤」可以切換成俯瞰模式，拖曳、縮放整座島群。這不是候選人或政黨的官方網站。"]
 ];
-function setFold(m){$("brand").classList.toggle("min",m);$("fold").textContent=m?"＋":"−";$("fold").setAttribute("aria-expanded",!m);$("fold").setAttribute("aria-label",m?"展開標題":"收合標題")}
-function autoFold(){if(innerWidth<700)setTimeout(()=>setFold(true),2500)}
-$("fold").onclick=()=>setFold(!$("brand").classList.contains("min"));$("brand").querySelector("h1").onclick=()=>{if($("brand").classList.contains("min"))setFold(false)};
+const BRAND_FOLD=HudFold.create({panel:$("brand"),button:$("fold"),title:$("brand").querySelector("h1"),autoBelow:700,autoDelay:2500});
+function setFold(m){BRAND_FOLD.set(m)}
+function autoFold(){BRAND_FOLD.auto()}
 function intro(i=0){
   const c=INTRO[i];
   $("introCard").innerHTML=`<div class="eyebrow">${c[0]}</div><h2>${c[1]}</h2><p>${c[2]}</p>${i===0?`<div class="slogan">心桃園，動起來</div>`:""}
@@ -674,13 +677,13 @@ function intro(i=0){
 $("bIndex").onclick=openIndex;$("pPass").onclick=openPassport;$("bPass").onclick=openPassport;$("bChar").onclick=openChar;
 $("bOverview").onclick=()=>window.setMode&&setMode(!st.overview);
 
-function renderIdx(q=""){q=q.trim().toLowerCase();const hit=i=>!q||[i.name,i.card.t,i.card.sum,...i.card.pts,...i.subs.flat()].join(" ").toLowerCase().includes(q);
-  const row=i=>{const ps=NPCS.filter(p=>p.isl===i.id),d=ps.filter(p=>st.done[p.id]).length;return `<button class="pi" data-id="${i.id}"><span class="n">${i.n}</span><span class="tt">${i.name}<small>${subT(i)}</small></span><span class="c">${i.subs.length} 項 ${d===ps.length?'✓':'↗'}</span></button>`};
-  const L=ISL.filter(hit);
-  $("plist").innerHTML=L.length?L.map(row).join(""):`<p class="empty">找不到符合「${q}」的政見。</p>`;
-  $("plist").querySelectorAll(".pi").forEach(b=>b.onclick=()=>travelIsl(islOf(b.dataset.id),true))}
+var IDX=SearchIndex.create({input:$("pq"),list:$("plist"),rowSelector:".pi",items:()=>ISL,
+  text:i=>[i.name,i.card.t,i.card.sum,...i.card.pts,...i.subs.flat()],
+  row:i=>{const ps=NPCS.filter(p=>p.isl===i.id),d=ps.filter(p=>st.done[p.id]).length;return `<button class="pi" data-id="${i.id}"><span class="n">${i.n}</span><span class="tt">${i.name}<small>${subT(i)}</small></span><span class="c">${i.subs.length} 項 ${d===ps.length?'✓':'↗'}</span></button>`},
+  empty:q=>`<p class="empty">找不到符合「${q}」的政見。</p>`,
+  onPick:id=>travelIsl(islOf(id),true)});
+function renderIdx(q=""){return IDX&&IDX.render(q)}
 $("pmeta").innerHTML=`${ISL.length} 座政策島／${ISL.reduce((a,i)=>a+i.subs.length,0)} 個具體目標<br>選一項政見，走進它的島。`;
-$("pq").addEventListener("input",e=>renderIdx(e.target.value));
 progress();intro();renderIdx();
 
 /* ---------- 3D ---------- */
